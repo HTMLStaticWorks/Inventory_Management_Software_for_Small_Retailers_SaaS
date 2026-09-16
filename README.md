@@ -1,0 +1,2 @@
+# Inventory_Management_Software_for_Small_Retailers_SaaS
+Automated website repository for Inventory_Management_Software_for_Small_Retailers_SaaS
