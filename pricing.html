@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pricing Plans & ROI Calculator | StockFlow Retail Inventory OS</title>
+  <meta name="description" content="Simple, transparent pricing for growing retail stores. Choose Starter, Growth, or Multi-Store Enterprise inventory plans with no hidden fees and a 14-day free trial.">
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+  <script>
+    (function() {
+      function safeGet(key, def) {
+        try { return localStorage.getItem(key) || def; } catch(e) { return def; }
+      }
+      function safeSet(key, val) {
+        try { localStorage.setItem(key, val); } catch(e) {}
+      }
+      window.applyTheme = function(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        safeSet('stockflow_theme', theme);
+        var btns = document.querySelectorAll('.js-theme-toggle');
+        for(var i=0; i<btns.length; i++) {
+          btns[i].innerHTML = theme === 'dark' ? '☀️' : '🌙';
+        }
+      };
+      window.toggleTheme = function() {
+        var curr = document.documentElement.getAttribute('data-theme') || 'light';
+        window.applyTheme(curr === 'dark' ? 'light' : 'dark');
+      };
+      window.applyRTL = function(dir) {
+        document.documentElement.setAttribute('dir', dir);
+        safeSet('stockflow_rtl', dir);
+        var btns = document.querySelectorAll('.js-rtl-toggle');
+        for(var i=0; i<btns.length; i++) {
+          btns[i].innerHTML = '⇄';
+        }
+      };
+      window.toggleRTL = function() {
+        var curr = document.documentElement.getAttribute('dir') || 'ltr';
+        window.applyRTL(curr === 'rtl' ? 'ltr' : 'rtl');
+      };
+      window.openMobileMenu = function() {
+        var mobileMenu = document.getElementById('mobileMenu');
+        if (mobileMenu) {
+          mobileMenu.classList.add('active');
+          document.body.style.overflow = 'hidden';
+        }
+      };
+      window.closeMobileMenu = function() {
+        var mobileMenu = document.getElementById('mobileMenu');
+        if (mobileMenu) {
+          mobileMenu.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      };
+      window.toggleMobileMenu = function() {
+        var mobileMenu = document.getElementById('mobileMenu');
+        if (mobileMenu) {
+          if (mobileMenu.classList.contains('active')) {
+            window.closeMobileMenu();
+          } else {
+            window.openMobileMenu();
+          }
+        }
+      };
+      var initTheme = safeGet('stockflow_theme', 'light');
+      var initRTL = safeGet('stockflow_rtl', 'ltr');
+      document.documentElement.setAttribute('data-theme', initTheme);
+      document.documentElement.setAttribute('dir', initRTL);
+    })();
+  </script>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo" id="navLogo">
+        <div class="brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">STOCKFLOW</span>
+          <span class="brand-desc">RETAIL INVENTORY OS</span>
+        </div>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="home-2.html" class="nav-link">Home 2</a></li>
+          <li><a href="about.html" class="nav-link">About</a></li>
+          <li><a href="features.html" class="nav-link">Features</a></li>
+          <li><a href="pricing.html" class="nav-link active">Pricing</a></li>
+          <li><a href="integrations.html" class="nav-link">Integrations</a></li>
+          <li><a href="contact.html" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="control-btn js-theme-toggle" id="desktopThemeBtn" title="Toggle Theme" onclick="toggleTheme()">🌙</button>
+        <button class="control-btn js-rtl-toggle" id="desktopRTLBtn" title="Toggle RTL" onclick="toggleRTL()">⇄</button>
+        <a href="dashboard.html" class="control-btn" title="Dashboard" style="font-size:1.1rem;">📊</a>
+        <a href="login.html" class="btn btn-primary">Login →</a>
+      </div>
+
+      <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle Navigation" onclick="openMobileMenu()">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer -->
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-overlay" onclick="closeMobileMenu()"></div>
+    <div class="mobile-drawer">
+      <div>
+        <div class="mobile-drawer-header">
+          <div class="brand-logo">
+            <div class="brand-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                <polyline points="9 22 9 12 15 12 15 22"/>
+              </svg>
+            </div>
+            <div class="brand-text">
+              <span class="brand-name">STOCKFLOW</span>
+              <span class="brand-desc">RETAIL INVENTORY OS</span>
+            </div>
+          </div>
+          <button type="button" class="mobile-close-btn" id="closeMenuBtn" onclick="closeMobileMenu()">&times;</button>
+        </div>
+        <ul class="mobile-nav-links">
+          <li><a href="index.html" class="mobile-nav-link">Home</a></li>
+          <li><a href="home-2.html" class="mobile-nav-link">Home 2</a></li>
+          <li><a href="about.html" class="mobile-nav-link">About</a></li>
+          <li><a href="features.html" class="mobile-nav-link">Features</a></li>
+          <li><a href="pricing.html" class="mobile-nav-link active">Pricing</a></li>
+          <li><a href="integrations.html" class="mobile-nav-link">Integrations</a></li>
+          <li><a href="contact.html" class="mobile-nav-link">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="mobile-controls">
+          <div class="mobile-controls-row">
+            <button class="control-btn js-theme-toggle" style="flex:1;" title="Toggle Theme" onclick="toggleTheme()">🌙</button>
+            <button class="control-btn js-rtl-toggle" style="flex:1;" title="Toggle RTL" onclick="toggleRTL()">⇄</button>
+            <a href="dashboard.html" class="control-btn" style="flex:1; text-align:center; font-size:1.1rem;" title="Dashboard">📊</a>
+          </div>
+          <a href="login.html" class="btn btn-primary" style="width: 100%;">Login →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       SECTION 01 — COMPACT INNER HERO WITH BG IMAGE
+       ========================================================================== -->
+  <section class="section" style="
+    background-image: url('assets/img/hero-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    padding-block: 64px 48px;
+    overflow: hidden;
+  ">
+    <div style="
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        linear-gradient(105deg, rgba(10,14,28,0.92) 0%, rgba(10,14,28,0.75) 60%, rgba(10,14,28,0.45) 100%),
+        radial-gradient(ellipse 70% 90% at 75% 50%, rgba(25,181,165,0.15) 0%, transparent 70%);
+    "></div>
+
+    <div class="container text-center" style="position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; text-align: center;">
+      <span class="eyebrow" style="background: rgba(25,181,165,0.18); border: 1px solid rgba(25,181,165,0.35); color: #0EEDC8; margin-inline: auto;">TRANSPARENT PLANS</span>
+      <h1 class="section-title" style="color: #FFFFFF; font-size: clamp(2.25rem, 4vw, 3.25rem); max-width: 800px; margin-inline: auto; margin-block: 16px 20px; text-align: center;">
+        PRICING THAT SCALES WITH YOUR STORE.
+      </h1>
+      <p class="section-desc" style="color: rgba(255,255,255,0.80); max-width: 640px; margin-inline: auto; text-align: center;">
+        Choose a plan based on your inventory workflow and store size. Start with a 14-day free trial, no credit card required.
+      </p>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SECTION 02 — PLANS GRID WITH MONTHLY / ANNUAL BILLING TOGGLE SWITCHER
+       ========================================================================== -->
+  <section class="section" style="background: var(--bg-surface-elevated); border-block: 1px solid var(--border-color); padding-block: 80px;">
+    <div class="container text-center">
+      
+      <!-- Monthly / Annual Billing Toggle -->
+      <div style="display: flex; justify-content: center; margin-bottom: 40px;">
+        <div class="billing-toggle-wrapper">
+          <button class="billing-toggle-btn active" id="billingMonthlyBtn">Monthly Billing</button>
+          <button class="billing-toggle-btn" id="billingAnnualBtn">
+            Annual Billing <span class="discount-pill">Save 20% 🎉</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="pricing-grid">
+        <!-- Plan 1 -->
+        <div class="pricing-card reveal delay-1" data-monthly="29" data-annual="23">
+          <div class="pricing-badge" style="background: var(--bg-surface-elevated); color: var(--text-muted); border: 1px solid var(--border-color);">STARTER</div>
+          <h3 style="font-size: 1.5rem; margin-top: 16px;">Single Store</h3>
+          <p style="font-size: 0.875rem; color: var(--text-secondary); margin-block: 8px 16px;">Ideal for new boutiques and single-location shops needing basic stock control.</p>
+
+          <div class="pricing-price-wrap" style="margin-block: 16px 24px;">
+            <span class="pricing-currency" style="font-size: 1.5rem; font-weight: 800; color: var(--text-primary);">$</span>
+            <span class="pricing-amount price-amount">29</span>
+            <span class="pricing-period" style="font-size: 0.875rem; color: var(--text-muted);">/ month</span>
+          </div>
+
+          <ul class="pricing-features-list">
+            <li><span class="check-icon">✓</span> 1 Retail Storefront</li>
+            <li><span class="check-icon">✓</span> Up to 1,000 Product SKUs</li>
+            <li><span class="check-icon">✓</span> Barcode Scanning App</li>
+            <li><span class="check-icon">✓</span> Basic Low-Stock Alerts</li>
+            <li><span class="check-icon">✓</span> Email Support</li>
+          </ul>
+
+          <a href="login.html" class="btn btn-secondary" style="width: 100%; justify-content: center;">CHOOSE STARTER →</a>
+        </div>
+
+        <!-- Plan 2 Popular -->
+        <div class="pricing-card featured reveal delay-2" data-monthly="49" data-annual="39">
+          <div style="position: absolute; top: 16px; right: 20px; background: var(--brand-teal); color: #FFFFFF; font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 20px; text-transform: uppercase;">MOST POPULAR</div>
+          <div class="pricing-badge" style="background: rgba(25, 181, 165, 0.15); color: var(--brand-teal);">GROWTH</div>
+          <h3 style="font-size: 1.5rem; margin-top: 16px;">Growing Retailer</h3>
+          <p style="font-size: 0.875rem; color: var(--text-secondary); margin-block: 8px 16px;">Designed for active retail stores managing POS sync and automated POs.</p>
+
+          <div class="pricing-price-wrap" style="margin-block: 16px 24px;">
+            <span class="pricing-currency" style="font-size: 1.5rem; font-weight: 800; color: var(--text-primary);">$</span>
+            <span class="pricing-amount price-amount">49</span>
+            <span class="pricing-period" style="font-size: 0.875rem; color: var(--text-muted);">/ month</span>
+          </div>
+
+          <ul class="pricing-features-list">
+            <li><span class="check-icon">✓</span> 3 Store Locations</li>
+            <li><span class="check-icon">✓</span> Up to 10,000 Product SKUs</li>
+            <li><span class="check-icon">✓</span> Automated Draft Purchase Orders</li>
+            <li><span class="check-icon">✓</span> Multi-Channel POS Sync</li>
+            <li><span class="check-icon">✓</span> Sales Velocity & Profit Reporting</li>
+            <li><span class="check-icon">✓</span> Priority Support</li>
+          </ul>
+
+          <a href="login.html" class="btn btn-primary" style="width: 100%; justify-content: center;">START FREE TRIAL →</a>
+        </div>
+
+        <!-- Plan 3 -->
+        <div class="pricing-card reveal delay-3" data-monthly="99" data-annual="79">
+          <div class="pricing-badge" style="background: var(--bg-surface-elevated); color: var(--text-muted); border: 1px solid var(--border-color);">ENTERPRISE</div>
+          <h3 style="font-size: 1.5rem; margin-top: 16px;">Multi-Location Hub</h3>
+          <p style="font-size: 0.875rem; color: var(--text-secondary); margin-block: 8px 16px;">For multi-store chains and central warehouse networks needing custom workflow rules.</p>
+
+          <div class="pricing-price-wrap" style="margin-block: 16px 24px;">
+            <span class="pricing-currency" style="font-size: 1.5rem; font-weight: 800; color: var(--text-primary);">$</span>
+            <span class="pricing-amount price-amount">99</span>
+            <span class="pricing-period" style="font-size: 0.875rem; color: var(--text-muted);">/ month</span>
+          </div>
+
+          <ul class="pricing-features-list">
+            <li><span class="check-icon">✓</span> Unlimited Locations & Warehouses</li>
+            <li><span class="check-icon">✓</span> Unlimited SKUs & Variants</li>
+            <li><span class="check-icon">✓</span> Inter-Store Transfer Workflows</li>
+            <li><span class="check-icon">✓</span> Custom Vendor Lead Time Rules</li>
+            <li><span class="check-icon">✓</span> Dedicated Account Manager</li>
+            <li><span class="check-icon">✓</span> 99.9% SLA Guarantee</li>
+          </ul>
+
+          <a href="contact.html" class="btn btn-secondary" style="width: 100%; justify-content: center;">CONTACT SALES →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       UNIQUE SECTION 01 — INTERACTIVE ROI & COST SAVINGS CALCULATOR
+       ========================================================================== -->
+  <section class="section" style="background: var(--bg-main); padding-block: 80px;">
+    <div class="container">
+      <div class="section-header text-center" style="margin-bottom: 48px;">
+        <span class="eyebrow" style="background: var(--teal-light); color: var(--brand-teal); margin-inline: auto;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          INTERACTIVE SAVINGS CALCULATOR
+        </span>
+        <h2 class="section-title" style="font-size: clamp(2rem, 3.5vw, 2.75rem); margin-block: 12px 16px;">
+          Calculate Your Retail Cost Savings With StockFlow
+        </h2>
+        <p class="section-desc" style="max-width: 640px; margin-inline: auto;">
+          Adjust the sliders below to see how much labor hours and out-of-stock revenue loss StockFlow can save your store every month.
+        </p>
+      </div>
+
+      <div class="roi-calculator-container reveal">
+        <div class="roi-calc-grid">
+          
+          <!-- Controls Column -->
+          <div>
+            <div class="calc-slider-group">
+              <div class="slider-header">
+                <span>Number of Storefront Locations</span>
+                <span class="slider-val-badge" id="valStores">2 Stores</span>
+              </div>
+              <input type="range" min="1" max="10" value="2" class="roi-slider-input" id="sliderStores">
+            </div>
+
+            <div class="calc-slider-group">
+              <div class="slider-header">
+                <span>Average Monthly Revenue per Store</span>
+                <span class="slider-val-badge" id="valRevenue">$40,000</span>
+              </div>
+              <input type="range" min="10000" max="200000" step="5000" value="40000" class="roi-slider-input" id="sliderRevenue">
+            </div>
+
+            <p style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.5; margin-top: 16px;">
+              💡 Estimates are calculated based on average retail benchmark data (Labor cost: $25/hr; Stockout loss reduction: 4% of total sales).
+            </p>
+          </div>
+
+          <!-- Live Metric Results Column -->
+          <div class="roi-results-box">
+            <div style="font-size: 0.75rem; color: #0EEDC8; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 16px; display: flex; align-items: center; gap: 6px;">
+              <span style="width: 8px; height: 8px; background: #0EEDC8; border-radius: 50%; box-shadow: 0 0 8px #0EEDC8;"></span> ESTIMATED STORE ROI METRICS
+            </div>
+
+            <div class="roi-result-metric">
+              <div class="roi-metric-label">Labor Hours Saved / Month</div>
+              <div class="roi-metric-value" id="metricHours">56 Hours</div>
+              <div style="font-size: 0.78125rem; color: #98A2B3; margin-top: 2px;">Saved on manual stock takes & purchase order creation</div>
+            </div>
+
+            <div class="roi-result-metric">
+              <div class="roi-metric-label">Stockout Revenue Protected / Month</div>
+              <div class="roi-metric-value" id="metricLoss">$2,720 / mo</div>
+              <div style="font-size: 0.78125rem; color: #98A2B3; margin-top: 2px;">Prevented sales loss via automated low-stock reorder triggers</div>
+            </div>
+
+            <div class="roi-result-metric">
+              <div class="roi-metric-label">Estimated Annual Net Value Created</div>
+              <div class="roi-metric-value" id="metricSavings" style="font-size: 2.25rem;">$49,440 / Year</div>
+            </div>
+
+            <div style="margin-top: 24px;">
+              <a href="login.html" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 12px;">CLAIM YOUR SAVINGS NOW →</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       UNIQUE SECTION 02 — GRANULAR FEATURE MATRIX COMPARISON TABLE
+       ========================================================================== -->
+  <section class="section" style="background: var(--bg-surface-elevated); border-block: 1px solid var(--border-color); padding-block: 80px;">
+    <div class="container">
+      <div class="section-header text-center" style="margin-bottom: 48px;">
+        <span class="eyebrow" style="background: var(--teal-light); color: var(--brand-teal); margin-inline: auto;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg>
+          DETAILED COMPARISON MATRIX
+        </span>
+        <h2 class="section-title" style="font-size: clamp(2rem, 3.5vw, 2.75rem); margin-block: 12px 16px;">
+          Compare Capabilities Across All StockFlow Tiers
+        </h2>
+        <p class="section-desc" style="max-width: 640px; margin-inline: auto;">
+          Review full feature specifications to pick the exact tier that fits your store operations.
+        </p>
+      </div>
+
+      <div class="matrix-table-wrapper reveal">
+        <table class="matrix-table">
+          <thead>
+            <tr>
+              <th style="width: 34%;">Feature / Capability</th>
+              <th style="width: 22%;">Starter ($29/mo)</th>
+              <th class="highlight-col" style="width: 22%;">Growth ($49/mo) ⭐</th>
+              <th style="width: 22%;">Enterprise ($99/mo)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Category 1 -->
+            <tr>
+              <td colspan="4" class="matrix-category-heading">1. Store Locations & Scope</td>
+            </tr>
+            <tr>
+              <td>Retail Storefronts Included</td>
+              <td>1 Store</td>
+              <td style="font-weight:700;">3 Stores</td>
+              <td style="font-weight:700; color:var(--brand-teal);">Unlimited</td>
+            </tr>
+            <tr>
+              <td>Maximum Product SKUs</td>
+              <td>1,000 SKUs</td>
+              <td>10,000 SKUs</td>
+              <td style="font-weight:700; color:var(--brand-teal);">Unlimited SKUs</td>
+            </tr>
+            <tr>
+              <td>Barcode Mobile Scanning App</td>
+              <td><span class="matrix-check">✓</span> Included</td>
+              <td><span class="matrix-check">✓</span> Included</td>
+              <td><span class="matrix-check">✓</span> Included</td>
+            </tr>
+            <tr>
+              <td>Multi-Channel POS & Storefront Sync</td>
+              <td><span class="matrix-dash">—</span></td>
+              <td><span class="matrix-check">✓</span> POS + E-commerce</td>
+              <td><span class="matrix-check">✓</span> All Channels + Custom APIs</td>
+            </tr>
+
+            <!-- Category 2 -->
+            <tr>
+              <td colspan="4" class="matrix-category-heading">2. Automation & Purchasing Engine</td>
+            </tr>
+            <tr>
+              <td>Automated Low-Stock Safety Alerts</td>
+              <td>Basic Email</td>
+              <td><span class="matrix-check">✓</span> Push & Digest</td>
+              <td><span class="matrix-check">✓</span> Instant Real-time Alerts</td>
+            </tr>
+            <tr>
+              <td>Draft Purchase Order Generator</td>
+              <td><span class="matrix-dash">—</span></td>
+              <td><span class="matrix-check">✓</span> Auto Pre-filled POs</td>
+              <td><span class="matrix-check">✓</span> Custom PO Workflows</td>
+            </tr>
+            <tr>
+              <td>Central Vendor Supplier Directory</td>
+              <td>Basic List</td>
+              <td><span class="matrix-check">✓</span> Full History</td>
+              <td><span class="matrix-check">✓</span> Scorecards & Lead Times</td>
+            </tr>
+
+            <!-- Category 3 -->
+            <tr>
+              <td colspan="4" class="matrix-category-heading">3. Multi-Store Transfers & Analytics</td>
+            </tr>
+            <tr>
+              <td>Inter-Store Stock Transfer Sign-off</td>
+              <td><span class="matrix-dash">—</span></td>
+              <td><span class="matrix-dash">—</span></td>
+              <td><span class="matrix-check">✓</span> Digital Transfer Approval</td>
+            </tr>
+            <tr>
+              <td>Stock Valuation Reports (FIFO/LIFO)</td>
+              <td>Basic Summary</td>
+              <td><span class="matrix-check">✓</span> FIFO & LIFO Audit</td>
+              <td><span class="matrix-check">✓</span> Custom Tax & CPA Reports</td>
+            </tr>
+            <tr>
+              <td>Sales Velocity & Profit Margins</td>
+              <td><span class="matrix-dash">—</span></td>
+              <td><span class="matrix-check">✓</span> Included</td>
+              <td><span class="matrix-check">✓</span> Advanced BI Dashboards</td>
+            </tr>
+
+            <!-- Category 4 -->
+            <tr>
+              <td colspan="4" class="matrix-category-heading">4. Support & SLAs</td>
+            </tr>
+            <tr>
+              <td>Dedicated Account Manager</td>
+              <td><span class="matrix-dash">—</span></td>
+              <td><span class="matrix-dash">—</span></td>
+              <td><span class="matrix-check">✓</span> Dedicated Manager</td>
+            </tr>
+            <tr>
+              <td>Uptime SLA Guarantee</td>
+              <td>99.5% SLA</td>
+              <td>99.9% SLA</td>
+              <td><span class="matrix-check">✓</span> 99.99% SLA Guarantee</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       UNIQUE SECTION 03 — RISK-FREE GUARANTEE & SOCIAL PROOF CARDS
+       ========================================================================== -->
+  <section class="section" style="background: var(--bg-main); padding-block: 80px;">
+    <div class="container">
+      <div class="section-header text-center" style="margin-bottom: 48px;">
+        <span class="eyebrow" style="background: var(--teal-light); color: var(--brand-teal); margin-inline: auto;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          ZERO RISK COMMITMENT
+        </span>
+        <h2 class="section-title" style="font-size: clamp(2rem, 3.5vw, 2.75rem); margin-block: 12px 16px;">
+          Try StockFlow Risk-Free For 14 Days
+        </h2>
+        <p class="section-desc" style="max-width: 640px; margin-inline: auto;">
+          No credit card required. Upgrade, downgrade, or cancel anytime with one click in your portal.
+        </p>
+      </div>
+
+      <div class="guarantee-grid">
+        <!-- Card 1 -->
+        <div class="guarantee-card reveal delay-1">
+          <div class="guarantee-icon-box">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          </div>
+          <h3 style="font-size: 1.25rem; margin-bottom: 10px;">Instant 5-Minute Setup</h3>
+          <p style="font-size: 0.9375rem; color: var(--text-secondary); line-height: 1.6;">
+            Import your existing product CSVs or connect your Shopify/Square POS registers in under 5 minutes without technical help.
+          </p>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="guarantee-card reveal delay-2">
+          <div class="guarantee-icon-box">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+          <h3 style="font-size: 1.25rem; margin-bottom: 10px;">Enterprise Data Security</h3>
+          <p style="font-size: 0.9375rem; color: var(--text-secondary); line-height: 1.6;">
+            All inventory logs are secured with 256-bit SSL encryption and backed up hourly across redundant cloud data centers.
+          </p>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="guarantee-card reveal delay-3">
+          <div class="guarantee-icon-box">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+          </div>
+          <h3 style="font-size: 1.25rem; margin-bottom: 10px;">30-Day Money-Back Guarantee</h3>
+          <p style="font-size: 0.9375rem; color: var(--text-secondary); line-height: 1.6;">
+            If you're not completely satisfied with StockFlow after your free trial, receive a 100% refund with no questions asked.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SECTION 06 — INTERACTIVE FAQ DROPDOWN ACCORDION SECTION
+       ========================================================================== -->
+  <section class="section" style="background: var(--bg-surface-elevated); border-block: 1px solid var(--border-color); padding-block: 80px;">
+    <div class="container">
+      <div class="section-header text-center" style="margin-bottom: 48px;">
+        <span class="eyebrow" style="background: var(--teal-light); color: var(--brand-teal); margin-inline: auto;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          FREQUENTLY ASKED QUESTIONS
+        </span>
+        <h2 class="section-title" style="font-size: clamp(2rem, 3.5vw, 2.75rem); margin-block: 12px 16px;">
+          Got Questions? We've Got Answers.
+        </h2>
+        <p class="section-desc" style="max-width: 640px; margin-inline: auto;">
+          Everything you need to know about StockFlow plans, hardware compatibility, and store onboarding.
+        </p>
+      </div>
+
+      <!-- FAQ Accordion Container -->
+      <div class="faq-container reveal">
+        
+        <!-- FAQ Item 1 -->
+        <div class="faq-item">
+          <button class="faq-header" aria-expanded="false">
+            <span class="faq-question">How does the 14-day free trial work?</span>
+            <span class="faq-icon">↓</span>
+          </button>
+          <div class="faq-body">
+            <div class="faq-answer">
+              You get full access to all features in the Growth Plan for 14 days without entering a credit card. At the end of the trial, you can choose the plan that best fits your store or cancel with zero obligation.
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ Item 2 -->
+        <div class="faq-item">
+          <button class="faq-header" aria-expanded="false">
+            <span class="faq-question">Can I upgrade, downgrade, or cancel my plan at any time?</span>
+            <span class="faq-icon">↓</span>
+          </button>
+          <div class="faq-body">
+            <div class="faq-answer">
+              Yes! StockFlow operates on flexible month-to-month or annual terms with zero long-term lock-in contracts. You can switch plans or cancel directly from your Retailer Portal at any time with one click.
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ Item 3 -->
+        <div class="faq-item">
+          <button class="faq-header" aria-expanded="false">
+            <span class="faq-question">Do I need special hardware or barcode scanners to use StockFlow?</span>
+            <span class="faq-icon">↓</span>
+          </button>
+          <div class="faq-body">
+            <div class="faq-answer">
+              No special hardware is required! StockFlow runs smoothly in any modern web browser or mobile phone camera to scan item barcodes. Standard USB and Bluetooth handheld barcode scanners are also plug-and-play supported.
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ Item 4 -->
+        <div class="faq-item">
+          <button class="faq-header" aria-expanded="false">
+            <span class="faq-question">What happens if my store exceeds its plan's SKU or location limit?</span>
+            <span class="faq-icon">↓</span>
+          </button>
+          <div class="faq-body">
+            <div class="faq-answer">
+              StockFlow will never stop your sales or lock your store inventory. If you exceed your SKU limit, we'll notify you via email and manager dashboard with a simple option to upgrade so your operations run uninterrupted.
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ Item 5 -->
+        <div class="faq-item">
+          <button class="faq-header" aria-expanded="false">
+            <span class="faq-question">How does POS register & online store sync work?</span>
+            <span class="faq-icon">↓</span>
+          </button>
+          <div class="faq-body">
+            <div class="faq-answer">
+              StockFlow connects via API with major POS systems (Square, Lightspeed, Clover) and e-commerce platforms (Shopify, WooCommerce, Amazon). Stock changes in physical registers or online carts are synced in under 1 second across all channels.
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ Item 6 -->
+        <div class="faq-item">
+          <button class="faq-header" aria-expanded="false">
+            <span class="faq-question">Is my store inventory data secure and backed up?</span>
+            <span class="faq-icon">↓</span>
+          </button>
+          <div class="faq-body">
+            <div class="faq-answer">
+              Yes. All inventory data is encrypted in transit and at rest using 256-bit SSL encryption. We perform automated hourly backups across redundant cloud data centers with a guaranteed 99.9% uptime SLA.
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ Item 7 -->
+        <div class="faq-item">
+          <button class="faq-header" aria-expanded="false">
+            <span class="faq-question">Do you offer onboarding assistance and team training?</span>
+            <span class="faq-icon">↓</span>
+          </button>
+          <div class="faq-body">
+            <div class="faq-answer">
+              Yes! Growth and Enterprise plans include guided 1-on-1 onboarding sessions with our retail tech specialists to help you import product data, configure safety stock reorder thresholds, and train your floor staff.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="brand-logo">
+            <div class="brand-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                <polyline points="9 22 9 12 15 12 15 22"/>
+              </svg>
+            </div>
+            <div class="brand-text">
+              <span class="brand-name">STOCKFLOW</span>
+              <span class="brand-desc">RETAIL INVENTORY OS</span>
+            </div>
+          </div>
+          <p>Practical, modern SaaS inventory management software designed for small and growing retailers.</p>
+          <div class="footer-social-links">
+            <a href="#" class="footer-social-icon" aria-label="X (formerly Twitter)" title="X (Twitter)">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+            <a href="#" class="footer-social-icon" aria-label="LinkedIn" title="LinkedIn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.25V10.9H6.46M7.86 6.74a1.62 1.62 0 1 0 0 3.24 1.62 1.62 0 0 0 0-3.24z"/></svg>
+            </a>
+            <a href="#" class="footer-social-icon" aria-label="Facebook" title="Facebook">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.99 3.66 9.12 8.44 9.88v-6.99H7.9v-2.89h2.54V9.8c0-2.51 1.49-3.89 3.78-3.89 1.09 0 2.23.19 2.23.19v2.47h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.45 2.89h-2.33v6.99C18.34 21.12 22 16.99 22 12z"/></svg>
+            </a>
+            <a href="#" class="footer-social-icon" aria-label="Instagram" title="Instagram">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </a>
+            <a href="#" class="footer-social-icon" aria-label="GitHub" title="GitHub">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">PRODUCT</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="home-2.html">Home 2</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="features.html">Features</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">RESOURCES</h4>
+          <ul class="footer-links">
+            <li><a href="integrations.html">Integrations</a></li>
+            <li><a href="dashboard.html#help">Help & Support</a></li>
+            <li><a href="login.html">Retailer Portal</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">ACCOUNT</h4>
+          <ul class="footer-links">
+            <li><a href="login.html">Login</a></li>
+            <li><a href="pricing.html">Start Free</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">NEWSLETTER</h4>
+          <form class="newsletter-form">
+            <input type="email" placeholder="Enter your email" class="newsletter-input" required>
+            <button type="submit" class="btn btn-primary" style="padding: 10px 16px;">SUBSCRIBE →</button>
+          </form>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div>© 2026 StockFlow. All rights reserved. Retail Inventory OS.</div>
+        <div class="footer-bottom-links">
+          <a href="#">Privacy</a><a href="#">Terms</a><a href="#">Accessibility</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- BACK TO TOP BUTTON -->
+  <button class="back-to-top" id="backToTopBtn" aria-label="Back to top" title="Back to top">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  </button>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

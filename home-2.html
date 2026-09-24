@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StockFlow | Retail Intelligence Edition (Home 2)</title>
+  <meta name="description" content="StockFlow Retail Intelligence Edition — Automated purchase orders, inventory health metrics, and profit velocity for growing retailers.">
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+  <script>
+    (function() {
+      function safeGet(key, def) {
+        try { return localStorage.getItem(key) || def; } catch(e) { return def; }
+      }
+      function safeSet(key, val) {
+        try { localStorage.setItem(key, val); } catch(e) {}
+      }
+      window.applyTheme = function(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        safeSet('stockflow_theme', theme);
+        var btns = document.querySelectorAll('.js-theme-toggle');
+        for(var i=0; i<btns.length; i++) {
+          btns[i].innerHTML = theme === 'dark' ? '☀️' : '🌙';
+        }
+      };
+      window.toggleTheme = function() {
+        var curr = document.documentElement.getAttribute('data-theme') || 'light';
+        window.applyTheme(curr === 'dark' ? 'light' : 'dark');
+      };
+      window.applyRTL = function(dir) {
+        document.documentElement.setAttribute('dir', dir);
+        safeSet('stockflow_rtl', dir);
+        var btns = document.querySelectorAll('.js-rtl-toggle');
+        for(var i=0; i<btns.length; i++) {
+          btns[i].innerHTML = '⇄';
+        }
+      };
+      window.toggleRTL = function() {
+        var curr = document.documentElement.getAttribute('dir') || 'ltr';
+        window.applyRTL(curr === 'rtl' ? 'ltr' : 'rtl');
+      };
+      window.openMobileMenu = function() {
+        var mobileMenu = document.getElementById('mobileMenu');
+        if (mobileMenu) {
+          mobileMenu.classList.add('active');
+          document.body.style.overflow = 'hidden';
+        }
+      };
+      window.closeMobileMenu = function() {
+        var mobileMenu = document.getElementById('mobileMenu');
+        if (mobileMenu) {
+          mobileMenu.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      };
+      window.toggleMobileMenu = function() {
+        var mobileMenu = document.getElementById('mobileMenu');
+        if (mobileMenu) {
+          if (mobileMenu.classList.contains('active')) {
+            window.closeMobileMenu();
+          } else {
+            window.openMobileMenu();
+          }
+        }
+      };
+      var initTheme = safeGet('stockflow_theme', 'light');
+      var initRTL = safeGet('stockflow_rtl', 'ltr');
+      document.documentElement.setAttribute('data-theme', initTheme);
+      document.documentElement.setAttribute('dir', initRTL);
+    })();
+  </script>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo" id="navLogo">
+        <div class="brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">STOCKFLOW</span>
+          <span class="brand-desc">RETAIL INVENTORY OS</span>
+        </div>
+      </a>
+
+      <!-- Desktop Nav with Home 2 next to Home -->
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="home-2.html" class="nav-link active">Home 2</a></li>
+          <li><a href="about.html" class="nav-link">About</a></li>
+          <li><a href="features.html" class="nav-link">Features</a></li>
+          <li><a href="pricing.html" class="nav-link">Pricing</a></li>
+          <li><a href="integrations.html" class="nav-link">Integrations</a></li>
+          <li><a href="contact.html" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="control-btn js-theme-toggle" id="desktopThemeBtn" title="Toggle Theme" onclick="toggleTheme()">🌙</button>
+        <button class="control-btn js-rtl-toggle" id="desktopRTLBtn" title="Toggle RTL" onclick="toggleRTL()">⇄</button>
+        <a href="dashboard.html" class="control-btn" title="Dashboard" style="font-size:1.1rem;">📊</a>
+        <a href="login.html" class="btn btn-primary">Login →</a>
+      </div>
+
+      <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle Navigation" onclick="openMobileMenu()">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer -->
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-overlay" onclick="closeMobileMenu()"></div>
+    <div class="mobile-drawer">
+      <div>
+        <div class="mobile-drawer-header">
+          <div class="brand-logo">
+            <div class="brand-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                <polyline points="9 22 9 12 15 12 15 22"/>
+              </svg>
+            </div>
+            <div class="brand-text">
+              <span class="brand-name">STOCKFLOW</span>
+              <span class="brand-desc">RETAIL INVENTORY OS</span>
+            </div>
+          </div>
+          <button type="button" class="mobile-close-btn" id="closeMenuBtn" onclick="closeMobileMenu()">&times;</button>
+        </div>
+        <ul class="mobile-nav-links">
+          <li><a href="index.html" class="mobile-nav-link">Home</a></li>
+          <li><a href="home-2.html" class="mobile-nav-link active">Home 2</a></li>
+          <li><a href="about.html" class="mobile-nav-link">About</a></li>
+          <li><a href="features.html" class="mobile-nav-link">Features</a></li>
+          <li><a href="pricing.html" class="mobile-nav-link">Pricing</a></li>
+          <li><a href="integrations.html" class="mobile-nav-link">Integrations</a></li>
+          <li><a href="contact.html" class="mobile-nav-link">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="mobile-controls">
+          <div class="mobile-controls-row">
+            <button class="control-btn js-theme-toggle" style="flex:1;" title="Toggle Theme" onclick="toggleTheme()">🌙</button>
+            <button class="control-btn js-rtl-toggle" style="flex:1;" title="Toggle RTL" onclick="toggleRTL()">⇄</button>
+            <a href="dashboard.html" class="control-btn" style="flex:1; text-align:center; font-size:1.1rem;" title="Dashboard">📊</a>
+          </div>
+          <a href="login.html" class="btn btn-primary" style="width: 100%;">Login →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       HOME 2 SECTION 01 — DISTINCT CENTERED COMMAND CENTER HERO (FITS VIEWPORT)
+       ========================================================================== -->
+  <section class="section hero-section" style="
+    min-height: calc(100vh - 74px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url('assets/img/hero-bg-2.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    overflow: hidden;
+    padding-block: var(--space-md);
+  ">
+    <!-- Overlay layers for dark SaaS readability & custom Home 2 aesthetic -->
+    <div style="
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        linear-gradient(180deg, rgba(8,12,24,0.91) 0%, rgba(10,16,30,0.70) 50%, rgba(8,12,24,0.92) 100%),
+        radial-gradient(ellipse 85% 85% at 50% 50%, rgba(14,237,200,0.12) 0%, transparent 80%);
+    "></div>
+
+    <!-- Retail Background Ambient Layer (No Floating Particles on Home 2) -->
+    <div class="hero-bg-anim-container">
+      <div class="hero-grid-mesh"></div>
+      <div class="hero-ambient-glow" style="top:25%; left:30%; width:600px; height:600px;"></div>
+    </div>
+
+    <div class="container hero-split" style="position: relative; z-index: 1;">
+      <!-- LEFT COLUMN: Content & Action CTAs -->
+      <div class="hero-content" style="max-width: 560px;">
+        <div style="margin-bottom: 14px;">
+          <span class="eyebrow" style="background: rgba(10, 24, 36, 0.94); border: 1px solid rgba(25,181,165,0.45); color: #0EEDC8; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);">RETAIL INTELLIGENCE EDITION</span>
+        </div>
+
+        <h1 class="hero-title" style="color: #FFFFFF; font-size: clamp(2.2rem, 3.8vw, 3.25rem); line-height: 1.12; margin-bottom: 18px;">
+          YOUR STORE HAS DATA.<br><span style="color: #0EEDC8;">STOCKFLOW</span> MAKES IT USEFUL.
+        </h1>
+
+        <p class="hero-subtitle" style="color: rgba(255,255,255,0.85); font-size: 1.0625rem; margin-bottom: 26px;">
+          Transform raw sales and shelf numbers into automated purchasing orders, inventory health metrics, and profit velocity.
+        </p>
+
+        <div class="btn-group" style="margin-bottom: 28px;">
+          <a href="pricing.html" class="btn btn-primary">EXPLORE STOCKFLOW →</a>
+          <a href="dashboard.html" class="btn btn-navy-secondary" style="border-color: rgba(255,255,255,0.25);">OPEN DASHBOARD →</a>
+        </div>
+
+        <!-- Quick Metrics Chip Bar -->
+        <div class="hero-metrics-chips" style="display: flex; gap: 12px; flex-wrap: wrap;">
+          <div style="background: rgba(16, 24, 40, 0.85); border: 1px solid rgba(255,255,255,0.12); padding: 8px 14px; border-radius: var(--radius-sm); font-size: 0.8125rem; color: #FFFFFF;">
+            <span style="color:#98A2B3;">Revenue:</span> <strong style="color:#0EEDC8;">$4,820/day</strong>
+          </div>
+          <div style="background: rgba(16, 24, 40, 0.85); border: 1px solid rgba(255,255,255,0.12); padding: 8px 14px; border-radius: var(--radius-sm); font-size: 0.8125rem; color: #FFFFFF;">
+            <span style="color:#98A2B3;">Low Stock:</span> <strong style="color:#0EEDC8;">12 SKUs Alerted</strong>
+          </div>
+          <div style="background: rgba(16, 24, 40, 0.85); border: 1px solid rgba(255,255,255,0.12); padding: 8px 14px; border-radius: var(--radius-sm); font-size: 0.8125rem; color: #FFFFFF;">
+            <span style="color:#98A2B3;">Auto Orders:</span> <strong style="color:#0EEDC8;">PO-2048 Issued</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN: Retail Image & Command Center Showcase Frame -->
+      <div class="hero-mockup-wrapper reveal reveal-scale" style="position: relative;">
+        <div style="
+          background: rgba(16, 24, 40, 0.92);
+          border: 1px solid rgba(255, 255, 255, 0.16);
+          border-radius: var(--radius-lg);
+          box-shadow: 0 25px 60px rgba(0, 0, 0, 0.55);
+          overflow: hidden;
+        ">
+          <!-- Window Header Bar -->
+          <div style="
+            background: rgba(10, 14, 28, 0.95);
+            padding: 10px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+          ">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <div class="mockup-dot active"></div>
+              <div class="mockup-dot"></div>
+              <div class="mockup-dot"></div>
+              <span style="color: #98A2B3; font-size: 0.75rem; margin-inline-start: 8px; font-family: var(--font-heading);">stockflow-app.com/intelligence</span>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span class="pulse-dot" style="width: 8px; height: 8px; border-radius: 50%; background: #0EEDC8;"></span>
+              <span style="color: #0EEDC8; font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.05em; font-family: var(--font-heading);">LIVE SYSTEM SYNC ACTIVE</span>
+            </div>
+          </div>
+
+          <!-- Retail Store Image Showcase Frame -->
+          <div style="position: relative; height: 340px; overflow: hidden;">
+            <img src="assets/img/retail-analytics-workspace.jpg" onerror="this.onerror=null; this.src='assets/img/retail-store-hero.jpg';" alt="StockFlow Retail Intelligence Workspace" style="
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+              display: block;
+              filter: brightness(0.92) contrast(1.05);
+            ">
+            <!-- Subtle Vignette Layer for sharp image readability -->
+            <div style="
+              position: absolute; inset: 0;
+              background: linear-gradient(to top, rgba(10, 14, 28, 0.92) 0%, rgba(10, 14, 28, 0.3) 50%, transparent 100%);
+            "></div>
+
+            <!-- Overlaid Command Metrics HUD Overlay -->
+            <div style="
+              position: absolute;
+              bottom: 16px;
+              left: 16px;
+              right: 16px;
+              background: rgba(10, 14, 28, 0.88);
+              border: 1px solid rgba(255, 255, 255, 0.15);
+              border-radius: var(--radius-md);
+              padding: 14px 16px;
+            ">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <span style="font-size: 0.75rem; font-weight: 700; color: #0EEDC8; letter-spacing: 0.05em;">STORE INTELLIGENCE PULSE</span>
+                <span style="font-size: 0.75rem; color: #98A2B3;">Synced 2m ago</span>
+              </div>
+              <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                <div style="background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 6px;">
+                  <span style="font-size: 0.6875rem; color: #98A2B3;">DAILY REVENUE</span>
+                  <div style="font-size: 1.125rem; font-weight: 800; color: #FFFFFF;" data-counter="4820" data-prefix="$">$4,820</div>
+                </div>
+                <div style="background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 6px;">
+                  <span style="font-size: 0.6875rem; color: #98A2B3;">LOW STOCK ALERTS</span>
+                  <div style="font-size: 1.125rem; font-weight: 800; color: #0EEDC8;" data-counter="12" data-suffix=" SKUs">12 SKUs</div>
+                </div>
+                <div style="background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 6px;">
+                  <span style="font-size: 0.6875rem; color: #98A2B3;">OPEN POs</span>
+                  <div style="font-size: 1.125rem; font-weight: 800; color: #FFFFFF;" data-counter="7" data-suffix=" Drafts">7 Drafts</div>
+                </div>
+                <div style="background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 6px;">
+                  <span style="font-size: 0.6875rem; color: #98A2B3;">STOCK VALUE</span>
+                  <div style="font-size: 1.125rem; font-weight: 800; color: #FFFFFF;" data-counter="84240" data-prefix="$">$84,240</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       HOME 2 SECTION 02 — BEFORE / AFTER COMPARISON SLIDER (NO EMOJI ICONS)
+       ========================================================================== -->
+  <section class="section" style="background: var(--bg-surface-elevated); border-block: 1px solid var(--border-color);">
+    <div class="container">
+      <div class="section-header text-center reveal">
+        <span class="eyebrow">TRANSFORMATION SLIDER</span>
+        <h2 class="section-title">THE BEFORE & AFTER OF RETAIL OPERATIONS.</h2>
+        <p class="section-desc">Drag the interactive slider to see how StockFlow replaces retail chaos with systematic control.</p>
+      </div>
+
+      <div class="before-after-wrapper reveal reveal-scale" id="beforeAfterSlider">
+        <!-- Before side -->
+        <div class="slider-side slider-before">
+          <div class="slider-content slider-before-content">
+            <span style="font-size: 0.8125rem; font-weight: 700; color: #98A2B3; text-transform: uppercase;">BEFORE STOCKFLOW</span>
+            <h3 style="font-size: 1.75rem; color: #FFFFFF; margin-block: 8px 16px;">Manual Retail Chaos</h3>
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 0.9375rem; color: #98A2B3;">
+              <li style="display: flex; align-items: center; gap: 8px;"><span style="color:#FF4D4D; font-weight:800;">—</span> Disjointed spreadsheets & lost paper notes</li>
+              <li style="display: flex; align-items: center; gap: 8px;"><span style="color:#FF4D4D; font-weight:800;">—</span> Unexpected stockouts of top sellers</li>
+              <li style="display: flex; align-items: center; gap: 8px;"><span style="color:#FF4D4D; font-weight:800;">—</span> Manual count errors & missing inventory</li>
+              <li style="display: flex; align-items: center; gap: 8px;"><span style="color:#FF4D4D; font-weight:800;">—</span> Unorganized vendor orders & delayed stock</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- After side -->
+        <div class="slider-side slider-after" id="sliderAfter">
+          <div class="slider-content slider-after-content">
+            <span style="font-size: 0.8125rem; font-weight: 700; color: var(--brand-teal); text-transform: uppercase;">AFTER STOCKFLOW</span>
+            <h3 style="font-size: 1.75rem; color: #FFFFFF; margin-block: 8px 16px;">Automated Inventory OS</h3>
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 0.9375rem; color: #F5F7FA;">
+              <li style="display: flex; align-items: center; gap: 8px;"><span style="color:#0EEDC8; font-weight:800;">+</span> Real-time multi-channel stock sync</li>
+              <li style="display: flex; align-items: center; gap: 8px;"><span style="color:#0EEDC8; font-weight:800;">+</span> Proactive low-stock reorder alerts</li>
+              <li style="display: flex; align-items: center; gap: 8px;"><span style="color:#0EEDC8; font-weight:800;">+</span> 1-Click Purchase Order generation</li>
+              <li style="display: flex; align-items: center; gap: 8px;"><span style="color:#0EEDC8; font-weight:800;">+</span> Location-wide inventory audit reporting</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Handle -->
+        <div class="slider-handle" id="sliderHandle">
+          <div class="slider-handle-button" style="font-size: 0.875rem; font-weight: 700;">SLIDE</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       HOME 2 SECTION 03 — PRODUCT MOVEMENT ANIMATED JOURNEY (NO EMOJI ICONS)
+       ========================================================================== -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header text-center reveal">
+        <span class="eyebrow">PRODUCT JOURNEY</span>
+        <h2 class="section-title">TRACK MOVEMENT FROM SUPPLIER TO SHELF.</h2>
+        <p class="section-desc">Live tracking: <strong>Classic Cotton Shirt (SKU: SH-104) — Initial Qty: 120</strong></p>
+      </div>
+
+      <div class="journey-timeline reveal reveal-scale">
+        <div class="journey-connector">
+          <div class="journey-animated-dot"></div>
+        </div>
+
+        <div class="journey-step">
+          <div class="journey-icon-box" style="font-weight: 800; color: var(--brand-teal);">01</div>
+          <strong style="font-size: 0.9375rem;">1. SUPPLIER</strong>
+          <span style="font-size: 0.75rem; color: var(--text-muted);">Northline Wholesale</span>
+        </div>
+
+        <div class="journey-step">
+          <div class="journey-icon-box" style="font-weight: 800; color: var(--brand-teal);">02</div>
+          <strong style="font-size: 0.9375rem;">2. PO CREATED</strong>
+          <span style="font-size: 0.75rem; color: var(--text-muted);">PO-2048 Issued</span>
+        </div>
+
+        <div class="journey-step">
+          <div class="journey-icon-box" style="font-weight: 800; color: var(--brand-teal);">03</div>
+          <strong style="font-size: 0.9375rem;">3. WAREHOUSE</strong>
+          <span style="font-size: 0.75rem; color: var(--text-muted);">Received 120 units</span>
+        </div>
+
+        <div class="journey-step">
+          <div class="journey-icon-box" style="font-weight: 800; color: var(--brand-teal);">04</div>
+          <strong style="font-size: 0.9375rem;">4. STORE SHELF</strong>
+          <span style="font-size: 0.75rem; color: var(--text-muted);">Main St Outlet</span>
+        </div>
+
+        <div class="journey-step">
+          <div class="journey-icon-box" style="font-weight: 800; color: var(--brand-teal);">05</div>
+          <strong style="font-size: 0.9375rem;">5. SALE & SYNC</strong>
+          <span style="font-size: 0.75rem; color: var(--brand-teal); font-weight: 700;">Qty 42 Balance</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       HOME 2 SECTION 04 — RETAIL IMAGE SHOWCASE SECTION
+       ========================================================================== -->
+  <section class="section img-showcase-section" style="padding-top: var(--space-xl); padding-bottom: var(--space-2xl);">
+    <div class="container">
+      <div class="showcase-card-frame reveal reveal-scale">
+        <img
+          src="assets/img/multi-store-network.jpg"
+          onerror="this.onerror=null; this.src='assets/img/hero-bg-2.jpg';"
+          alt="Modern boutique retail store floor"
+          class="showcase-img"
+        >
+        <div style="
+          position: absolute; inset: 0; z-index: 1;
+          background: linear-gradient(to bottom, rgba(10,14,28,0.65) 0%, transparent 35%, rgba(10,14,28,0.45) 65%, rgba(10,14,28,0.88) 100%);
+          pointer-events: none;
+        "></div>
+
+        <!-- Floating Hotspot Pins over Store Features -->
+        <div class="store-hotspot-pin" style="top: 26%; left: 30%;">
+          <span class="pulse-dot" style="width: 8px; height: 8px; border-radius: 50%; background: #0EEDC8;"></span>
+          <span>Automated Inventory Health</span>
+        </div>
+
+        <div class="store-hotspot-pin" style="top: 36%; right: 26%;">
+          <span class="pulse-dot" style="width: 8px; height: 8px; border-radius: 50%; background: #0EEDC8;"></span>
+          <span>Multi-Store POS Sync</span>
+        </div>
+
+        <div class="reveal reveal-left" style="
+          position: absolute; top: 28px; left: 32px; z-index: 2;
+          background: rgba(14,237,200,0.18); border: 1px solid rgba(14,237,200,0.45); border-radius: 40px; padding: 8px 20px; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.1em; color: #0EEDC8; font-family: var(--font-heading); box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+        ">REAL-TIME STORE CONTROL</div>
+
+        <div class="reveal reveal-scale" style="
+          position: absolute; bottom: 0; left: 0; right: 0; z-index: 2; padding: 36px 40px 40px; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 24px;
+        ">
+          <div>
+            <h2 style="font-family: var(--font-heading); font-size: clamp(1.75rem, 3.5vw, 2.75rem); font-weight: 800; color: #FFFFFF; margin: 0 0 10px; text-shadow: 0 2px 18px rgba(0,0,0,0.7);">
+              INTELLIGENT SHELF AUTOMATION.
+            </h2>
+            <p style="color: rgba(255,255,255,0.88); font-size: 1.0625rem; max-width: 520px; margin: 0 0 20px; text-shadow: 0 2px 12px rgba(0,0,0,0.6);">
+              StockFlow handles reorder calculations and multi-location tracking automatically while you focus on customers.
+            </p>
+            <a href="features.html" class="btn btn-primary" style="padding: 12px 24px;">EXPLORE FEATURES →</a>
+          </div>
+
+          <div style="display: flex; gap: 14px; flex-wrap: wrap; align-items: center;">
+            <div class="showcase-kpi-chip" style="background: rgba(10, 14, 28, 0.72); border: 1px solid rgba(255, 255, 255, 0.25);">
+              <div style="font-size: 1.625rem; font-weight: 800; color: #0EEDC8; font-family: var(--font-heading);" data-counter="2400" data-suffix="+">2,400+</div>
+              <div style="font-size: 0.75rem; color: rgba(255,255,255,0.85); font-weight: 600; margin-top: 2px;">Active Stores</div>
+            </div>
+            <div class="showcase-kpi-chip" style="background: rgba(10, 14, 28, 0.72); border: 1px solid rgba(255, 255, 255, 0.25);">
+              <div style="font-size: 1.625rem; font-weight: 800; color: #0EEDC8; font-family: var(--font-heading);" data-counter="12" data-suffix="M+">12M+</div>
+              <div style="font-size: 0.75rem; color: rgba(255,255,255,0.85); font-weight: 600; margin-top: 2px;">SKUs Tracked</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       HOME 2 SECTION 05 (NEW UNIQUE SECTION 1) — INTERACTIVE PROFIT VELOCITY CALCULATOR
+       ========================================================================== -->
+  <section class="section" style="background: var(--bg-surface-elevated); border-top: 1px solid var(--border-color); padding-block: var(--space-2xl);">
+    <div class="container">
+      <div class="section-header text-center reveal">
+        <span class="eyebrow" style="background: rgba(14,237,200,0.15); border: 1px solid rgba(14,237,200,0.3); color: #0EEDC8;">PROFIT VELOCITY SIMULATOR</span>
+        <h2 class="section-title">CALCULATE YOUR RETAIL LEAKAGE & SAVINGS.</h2>
+        <p class="section-desc">Adjust store parameters below to see how StockFlow prevents stockouts, deadstock capital lockup, and manual PO overhead.</p>
+      </div>
+
+      <div class="reveal reveal-scale" style="
+        max-width: 960px;
+        margin: 0 auto;
+        background: rgba(10, 16, 30, 0.85);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: var(--radius-xl);
+        padding: 36px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+      ">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 32px; align-items: center;">
+          <!-- Controls Column -->
+          <div style="display: flex; flex-direction: column; gap: 24px;">
+            <div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-weight: 700;">
+                <span style="color: rgba(255,255,255,0.9); font-size: 0.9375rem;">Monthly Store Inventory Value</span>
+                <span style="color: #0EEDC8; font-size: 1rem; font-family: var(--font-heading);" id="calcInvValDisplay">$65,000</span>
+              </div>
+              <input type="range" id="calcInvValInput" min="10000" max="250000" step="5000" value="65000" style="
+                width: 100%;
+                accent-color: #0EEDC8;
+                cursor: pointer;
+              ">
+              <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #98A2B3; margin-top: 4px;">
+                <span>$10k</span>
+                <span>$250k+</span>
+              </div>
+            </div>
+
+            <div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-weight: 700;">
+                <span style="color: rgba(255,255,255,0.9); font-size: 0.9375rem;">Active Retail Outlets</span>
+                <span style="color: #0EEDC8; font-size: 1rem; font-family: var(--font-heading);" id="calcStoresDisplay">3 Locations</span>
+              </div>
+              <input type="range" id="calcStoresInput" min="1" max="15" step="1" value="3" style="
+                width: 100%;
+                accent-color: #0EEDC8;
+                cursor: pointer;
+              ">
+              <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #98A2B3; margin-top: 4px;">
+                <span>1 Store</span>
+                <span>15 Stores</span>
+              </div>
+            </div>
+
+            <div style="background: rgba(255,255,255,0.04); border-inline-start: 3px solid #0EEDC8; padding: 12px 16px; border-radius: 4px; font-size: 0.8125rem; color: #98A2B3;">
+              💡 <em>Based on retail industry averages of 12% deadstock capital friction and 16 hrs/mo spent on manual PO generation per store.</em>
+            </div>
+          </div>
+
+          <!-- Output Results Column -->
+          <div class="calc-metric-grid">
+            <div class="calc-metric-card">
+              <span class="calc-metric-label">ESTIMATED ANNUAL LOSS</span>
+              <div class="calc-metric-val loss" id="calcAnnualLoss">$23,400</div>
+              <span class="calc-metric-sub">Without automation</span>
+            </div>
+
+            <div class="calc-metric-card featured">
+              <span class="calc-metric-label" style="color: #0EEDC8;">STOCKFLOW RECOVERY</span>
+              <div class="calc-metric-val recovery" id="calcAnnualSavings">$19,890 / yr</div>
+              <span class="calc-metric-sub" style="color: #0EEDC8;">Direct margin retained</span>
+            </div>
+
+            <div class="calc-metric-card">
+              <span class="calc-metric-label">PO TIME SAVED</span>
+              <div class="calc-metric-val" id="calcTimeSaved">576 hrs / yr</div>
+              <span class="calc-metric-sub">Automated generation</span>
+            </div>
+
+            <div class="calc-metric-card">
+              <span class="calc-metric-label">STOCKOUT REDUCTION</span>
+              <div class="calc-metric-val" style="color: #0EEDC8;">99.4%</div>
+              <span class="calc-metric-sub">Predictive reordering</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       HOME 2 SECTION 06 (NEW UNIQUE SECTION 2) — MULTI-STORE AUTOMATION MATRIX
+       ========================================================================== -->
+  <section class="section" style="background: var(--bg-surface-main); border-block: 1px solid var(--border-color); padding-block: var(--space-2xl);">
+    <div class="container">
+      <div class="section-header text-center reveal">
+        <span class="eyebrow" style="background: rgba(14,237,200,0.15); border: 1px solid rgba(14,237,200,0.3); color: #0EEDC8;">MULTI-STORE COMMAND MATRIX</span>
+        <h2 class="section-title">REAL-TIME INVENTORY ROUTING & ALERTS.</h2>
+        <p class="section-desc">Select an active retail outlet below to see live stock balance, automated PO triggers, and inter-store rebalancing.</p>
+      </div>
+
+      <!-- Interactive Store Selector Tabs -->
+      <div class="reveal reveal-scale" style="max-width: 980px; margin: 0 auto;">
+        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 24px;" id="matrixTabGroup">
+          <button class="matrix-tab-btn active" data-store="store1" style="
+            background: rgba(14,237,200,0.15);
+            border: 1px solid #0EEDC8;
+            color: #0EEDC8;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 0.875rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s ease;
+          ">📍 Main Street Outlet <span style="font-size: 0.75rem; opacity: 0.8; margin-inline-start: 6px; background: rgba(14,237,200,0.25); padding: 2px 8px; border-radius: 10px;">98.4% Optimal</span></button>
+
+          <button class="matrix-tab-btn" data-store="store2" style="
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: rgba(255,255,255,0.8);
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 0.875rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s ease;
+          ">📍 Downtown Flagship <span style="font-size: 0.75rem; color: #FFB020; margin-inline-start: 6px; background: rgba(255,176,32,0.2); padding: 2px 8px; border-radius: 10px;">3 Low Stock</span></button>
+
+          <button class="matrix-tab-btn" data-store="store3" style="
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: rgba(255,255,255,0.8);
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 0.875rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s ease;
+          ">📍 Central Warehouse <span style="font-size: 0.75rem; color: #60A5FA; margin-inline-start: 6px; background: rgba(96,165,250,0.2); padding: 2px 8px; border-radius: 10px;">Receive PO-2049</span></button>
+        </div>
+
+        <!-- Dynamic Store SKU Table Frame -->
+        <div style="
+          background: rgba(10, 16, 30, 0.9);
+          border: 1px solid rgba(255, 255, 255, 0.14);
+          border-radius: var(--radius-lg);
+          padding: 24px;
+          overflow-x: auto;
+          box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+        ">
+          <table style="width: 100%; border-collapse: collapse; text-align: start; min-width: 600px;">
+            <thead>
+              <tr style="border-bottom: 1px solid rgba(255,255,255,0.12); color: #98A2B3; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">
+                <th style="padding: 12px 16px; text-align: start;">SKU Details</th>
+                <th style="padding: 12px 16px; text-align: center;">On-Shelf Qty</th>
+                <th style="padding: 12px 16px; text-align: center;">Min Reorder Point</th>
+                <th style="padding: 12px 16px; text-align: end;">Automated Action</th>
+              </tr>
+            </thead>
+            <tbody id="matrixTableBody" style="font-size: 0.875rem; color: #FFFFFF;">
+              <!-- Javascript injects store rows dynamically -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Bottom Action Strip -->
+        <div class="btn-group" style="margin-top: 32px; justify-content: center;">
+          <a href="pricing.html" class="btn btn-primary">START YOUR FREE TRIAL TODAY →</a>
+          <a href="features.html" class="btn btn-navy-secondary" style="border-color: rgba(255,255,255,0.25);">EXPLORE ALL FEATURES →</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="brand-logo">
+            <div class="brand-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                <polyline points="9 22 9 12 15 12 15 22"/>
+              </svg>
+            </div>
+            <div class="brand-text">
+              <span class="brand-name">STOCKFLOW</span>
+              <span class="brand-desc">RETAIL INVENTORY OS</span>
+            </div>
+          </div>
+          <p>Practical, modern SaaS inventory management software designed for small and growing retailers.</p>
+          <div class="footer-social-links">
+            <a href="#" class="footer-social-icon" aria-label="X (formerly Twitter)" title="X (Twitter)">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+            <a href="#" class="footer-social-icon" aria-label="LinkedIn" title="LinkedIn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.25V10.9H6.46M7.86 6.74a1.62 1.62 0 1 0 0 3.24 1.62 1.62 0 0 0 0-3.24z"/></svg>
+            </a>
+            <a href="#" class="footer-social-icon" aria-label="Facebook" title="Facebook">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.99 3.66 9.12 8.44 9.88v-6.99H7.9v-2.89h2.54V9.8c0-2.51 1.49-3.89 3.78-3.89 1.09 0 2.23.19 2.23.19v2.47h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.45 2.89h-2.33v6.99C18.34 21.12 22 16.99 22 12z"/></svg>
+            </a>
+            <a href="#" class="footer-social-icon" aria-label="Instagram" title="Instagram">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </a>
+            <a href="#" class="footer-social-icon" aria-label="GitHub" title="GitHub">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">PRODUCT</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="home-2.html">Home 2</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="features.html">Features</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">RESOURCES</h4>
+          <ul class="footer-links">
+            <li><a href="integrations.html">Integrations</a></li>
+            <li><a href="dashboard.html#help">Help & Support</a></li>
+            <li><a href="login.html">Retailer Portal</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">ACCOUNT</h4>
+          <ul class="footer-links">
+            <li><a href="login.html">Login</a></li>
+            <li><a href="pricing.html">Start Free</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">NEWSLETTER</h4>
+          <form class="newsletter-form">
+            <input type="email" placeholder="Enter your email" class="newsletter-input" required>
+            <button type="submit" class="btn btn-primary" style="padding: 10px 16px;">SUBSCRIBE →</button>
+          </form>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div>© 2026 StockFlow. All rights reserved. Retail Inventory OS.</div>
+        <div class="footer-bottom-links">
+          <a href="#">Privacy</a><a href="#">Terms</a><a href="#">Accessibility</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+  <script>
+    // --- HOME 2 UNIQUE SECTIONS INTERACTIVE CONTROLLERS ---
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Profit Velocity Calculator Controller
+      const invInput = document.getElementById('calcInvValInput');
+      const invDisplay = document.getElementById('calcInvValDisplay');
+      const storesInput = document.getElementById('calcStoresInput');
+      const storesDisplay = document.getElementById('calcStoresDisplay');
+      const annualLoss = document.getElementById('calcAnnualLoss');
+      const annualSavings = document.getElementById('calcAnnualSavings');
+      const timeSaved = document.getElementById('calcTimeSaved');
+
+      function updateCalculator() {
+        if (!invInput || !storesInput) return;
+        const invVal = parseInt(invInput.value);
+        const stores = parseInt(storesInput.value);
+
+        if (invDisplay) invDisplay.textContent = '$' + invVal.toLocaleString();
+        if (storesDisplay) storesDisplay.textContent = stores + (stores === 1 ? ' Location' : ' Locations');
+
+        const loss = Math.round(invVal * 0.12 * stores);
+        const savings = Math.round(loss * 0.85);
+        const hours = stores * 192;
+
+        if (annualLoss) annualLoss.textContent = '$' + loss.toLocaleString();
+        if (annualSavings) annualSavings.textContent = '$' + savings.toLocaleString() + ' / yr';
+        if (timeSaved) timeSaved.textContent = hours.toLocaleString() + ' hrs / yr';
+      }
+
+      if (invInput && storesInput) {
+        invInput.addEventListener('input', updateCalculator);
+        storesInput.addEventListener('input', updateCalculator);
+        updateCalculator();
+      }
+
+      // 2. Multi-Store Command Matrix Controller
+      const storeData = {
+        store1: [
+          { sku: 'BLZ-809', name: 'Silk Blend Blazer', shelf: '4 units', min: '10 units', status: 'PO Drafted (#PO-9021)', badgeBg: 'rgba(255,176,32,0.18)', badgeColor: '#FFB020', border: 'rgba(255,176,32,0.4)' },
+          { sku: 'SNK-201', name: 'Urban Leather Sneakers', shelf: '38 units', min: '15 units', status: 'Healthy (High Velocity)', badgeBg: 'rgba(14,237,200,0.18)', badgeColor: '#0EEDC8', border: 'rgba(14,237,200,0.4)' },
+          { sku: 'JKT-405', name: 'Vintage Denim Jacket', shelf: '0 units', min: '8 units', status: 'Auto-Transferred from Whse', badgeBg: 'rgba(96,165,250,0.18)', badgeColor: '#60A5FA', border: 'rgba(96,165,250,0.4)' },
+          { sku: 'ACC-102', name: 'Minimalist Leather Belt', shelf: '52 units', min: '20 units', status: 'Stock Optimized', badgeBg: 'rgba(14,237,200,0.18)', badgeColor: '#0EEDC8', border: 'rgba(14,237,200,0.4)' }
+        ],
+        store2: [
+          { sku: 'TSH-044', name: 'Organic Cotton T-Shirt', shelf: '2 units', min: '25 units', status: 'CRITICAL LOW (Auto PO)', badgeBg: 'rgba(255,107,107,0.18)', badgeColor: '#FF6B6B', border: 'rgba(255,107,107,0.4)' },
+          { sku: 'HD-502', name: 'Fleece Heavyweight Hoodie', shelf: '5 units', min: '12 units', status: 'Reorder Triggered', badgeBg: 'rgba(255,176,32,0.18)', badgeColor: '#FFB020', border: 'rgba(255,176,32,0.4)' },
+          { sku: 'PNT-301', name: 'Slim Fit Chino Pants', shelf: '45 units', min: '15 units', status: 'Healthy Stock', badgeBg: 'rgba(14,237,200,0.18)', badgeColor: '#0EEDC8', border: 'rgba(14,237,200,0.4)' },
+          { sku: 'SOC-099', name: 'Merino Wool Socks 3-Pack', shelf: '3 units', min: '20 units', status: 'Transfer En-Route', badgeBg: 'rgba(96,165,250,0.18)', badgeColor: '#60A5FA', border: 'rgba(96,165,250,0.4)' }
+        ],
+        store3: [
+          { sku: 'BULK-990', name: 'Pallet: Raw Denim Spools', shelf: '420 units', min: '100 units', status: 'Receiving PO-2049', badgeBg: 'rgba(96,165,250,0.18)', badgeColor: '#60A5FA', border: 'rgba(96,165,250,0.4)' },
+          { sku: 'BOX-101', name: 'Eco Shipping Boxes Small', shelf: '1,400 units', min: '300 units', status: 'Supply Ready', badgeBg: 'rgba(14,237,200,0.18)', badgeColor: '#0EEDC8', border: 'rgba(14,237,200,0.4)' },
+          { sku: 'TAG-55', name: 'RFID Garment Hangtags', shelf: '8,500 units', min: '2,000 units', status: 'Supply Ready', badgeBg: 'rgba(14,237,200,0.18)', badgeColor: '#0EEDC8', border: 'rgba(14,237,200,0.4)' },
+          { sku: 'TAPE-02', name: 'Biodegradable Packing Tape', shelf: '80 rolls', min: '150 rolls', status: 'Supplier Order Pending', badgeBg: 'rgba(255,176,32,0.18)', badgeColor: '#FFB020', border: 'rgba(255,176,32,0.4)' }
+        ]
+      };
+
+      function renderMatrixTable(storeKey) {
+        const tbody = document.getElementById('matrixTableBody');
+        if (!tbody) return;
+        const items = storeData[storeKey] || [];
+        tbody.innerHTML = items.map(item => `
+          <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+            <td style="padding: 14px 16px;">
+              <div style="font-weight: 700; color: #FFFFFF;">${item.name}</div>
+              <div style="font-size: 0.75rem; color: #98A2B3;">SKU: ${item.sku}</div>
+            </td>
+            <td style="padding: 14px 16px; text-align: center; font-weight: 700; color: #0EEDC8;">${item.shelf}</td>
+            <td style="padding: 14px 16px; text-align: center; color: #98A2B3;">${item.min}</td>
+            <td style="padding: 14px 16px; text-align: end;">
+              <span style="background: ${item.badgeBg}; border: 1px solid ${item.border}; color: ${item.badgeColor}; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700;">${item.status}</span>
+            </td>
+          </tr>
+        `).join('');
+      }
+
+      const tabBtns = document.querySelectorAll('.matrix-tab-btn');
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          tabBtns.forEach(b => {
+            b.style.background = 'rgba(255,255,255,0.05)';
+            b.style.borderColor = 'rgba(255,255,255,0.15)';
+            b.style.color = 'rgba(255,255,255,0.8)';
+          });
+          btn.style.background = 'rgba(14,237,200,0.15)';
+          btn.style.borderColor = '#0EEDC8';
+          btn.style.color = '#0EEDC8';
+          renderMatrixTable(btn.getAttribute('data-store'));
+        });
+      });
+
+      renderMatrixTable('store1');
+    });
+  </script>
+  <!-- BACK TO TOP BUTTON -->
+  <button class="back-to-top" id="backToTopBtn" aria-label="Back to top" title="Back to top">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  </button>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

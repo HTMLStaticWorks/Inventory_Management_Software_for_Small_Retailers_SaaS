@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Retailer Dashboard | StockFlow OS</title>
+  <meta name="description" content="StockFlow Retailer Dashboard — manage inventory, purchase orders, sales reports, suppliers, and multi-location store stock from one simple workspace.">
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+  <link rel="stylesheet" href="assets/css/dashboard.css">
+</head>
+<body>
+
+  <div class="dashboard-app">
+
+    <!-- ==========================================================================
+         SIDEBAR NAVIGATION
+         ========================================================================== -->
+    <aside class="sidebar" id="dashSidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-brand-link" style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit;" title="Back to StockFlow Home">
+          <div class="sidebar-logo-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+              <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+          </div>
+          <div>
+            <div class="sidebar-logo-text">STOCKFLOW</div>
+            <div class="sidebar-logo-sub">RETAIL INVENTORY OS</div>
+          </div>
+        </a>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="sidebar-menu-category">Main Operations</div>
+        <button class="nav-item-btn js-dash-nav active" data-target="overview">
+          <span class="nav-icon">📊</span> Overview
+        </button>
+        <button class="nav-item-btn js-dash-nav" data-target="inventory">
+          <span class="nav-icon">📦</span> Inventory
+        </button>
+        <button class="nav-item-btn js-dash-nav" data-target="purchase-orders">
+          <span class="nav-icon">📄</span> Purchase Orders
+        </button>
+        <button class="nav-item-btn js-dash-nav" data-target="alerts">
+          <span class="nav-icon">⚠️</span> Low Stock Alerts
+        </button>
+
+        <div class="sidebar-menu-category">Analytics & Audits</div>
+        <button class="nav-item-btn js-dash-nav" data-target="sales-reports">
+          <span class="nav-icon">📈</span> Sales Reports
+        </button>
+        <button class="nav-item-btn js-dash-nav" data-target="inventory-reports">
+          <span class="nav-icon">📋</span> Inventory Reports
+        </button>
+
+        <div class="sidebar-menu-category">Management</div>
+        <button class="nav-item-btn js-dash-nav" data-target="locations">
+          <span class="nav-icon">🏪</span> Locations
+        </button>
+        <button class="nav-item-btn js-dash-nav" data-target="suppliers">
+          <span class="nav-icon">🏭</span> Suppliers
+        </button>
+        <button class="nav-item-btn js-dash-nav" data-target="billing">
+          <span class="nav-icon">💳</span> Subscription & Billing
+        </button>
+        <button class="nav-item-btn js-dash-nav" data-target="settings">
+          <span class="nav-icon">⚙️</span> Settings
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="nav-item-btn js-dash-nav" data-target="help">
+          <span class="nav-icon">❓</span> Help & Support
+        </button>
+        <a href="index.html" class="nav-item-btn" style="color: #F87171;">
+          <span class="nav-icon">🚪</span> Sign Out
+        </a>
+      </div>
+    </aside>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- ==========================================================================
+         MAIN WRAPPER & TOPBAR
+         ========================================================================== -->
+    <div class="main-wrapper">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="topbar-icon-btn mobile-hamburger-btn" id="sidebarToggleBtn" aria-label="Toggle Navigation">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <h1 class="topbar-title" id="dashPageTitle">Overview</h1>
+        </div>
+
+        <div class="topbar-right">
+          <!-- Live Search Input -->
+          <div class="topbar-search-wrapper">
+            <span class="topbar-search-icon">🔍</span>
+            <input type="text" class="topbar-search-input" id="topbarSearchInput" placeholder="Search products, suppliers, POs...">
+            <div class="search-results-dropdown" id="searchResultsDropdown"></div>
+          </div>
+
+          <!-- Notification Bell -->
+          <button class="topbar-icon-btn" id="notifBtn" aria-label="Notifications">
+            🔔
+            <span class="notification-badge"></span>
+          </button>
+
+          <!-- Theme & RTL Controls -->
+          <button class="topbar-icon-btn js-theme-toggle" id="dashThemeBtn" title="Toggle Light/Dark Theme">🌙</button>
+          <button class="topbar-icon-btn js-rtl-toggle" id="dashRTLBtn" title="Toggle LTR/RTL Layout">⇄</button>
+
+          <!-- Retailer User Avatar -->
+          <div class="user-profile-menu">
+            <div class="user-avatar">JL</div>
+            <div class="user-info">
+              <span class="user-name">Jordan Lee</span>
+              <span class="user-store">Northline Market (SF-2048)</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- ==========================================================================
+           DYNAMIC VIEW CONTAINER (SINGLE HTML FILE SPA)
+           ========================================================================== -->
+      <main class="content-viewport">
+
+        <!-- VIEW 01: OVERVIEW -->
+        <section class="view-panel active" id="view-overview">
+          <div class="dash-header-row">
+            <div>
+              <h2 style="font-size: 1.5rem;">GOOD MORNING, JORDAN</h2>
+              <p class="dash-subtitle">Here's what is happening across your inventory today.</p>
+            </div>
+            <span class="badge badge-teal" style="padding: 6px 12px;">Live Workspace Data</span>
+          </div>
+
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-card-header">
+                <span class="kpi-title">TOTAL PRODUCTS</span>
+                <div class="kpi-icon-box">📦</div>
+              </div>
+              <div class="kpi-value">1,248</div>
+              <div class="kpi-meta">Across 3 Store Locations</div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-card-header">
+                <span class="kpi-title">LOW STOCK</span>
+                <div class="kpi-icon-box" style="background: rgba(239, 68, 68, 0.12); color: #EF4444;">⚠️</div>
+              </div>
+              <div class="kpi-value" style="color: #EF4444;">18</div>
+              <div class="kpi-meta" style="color: #EF4444;">Requires Immediate Reorder</div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-card-header">
+                <span class="kpi-title">OPEN PURCHASE ORDERS</span>
+                <div class="kpi-icon-box">📄</div>
+              </div>
+              <div class="kpi-value">7</div>
+              <div class="kpi-meta">3 Pending Supplier Dispatch</div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-card-header">
+                <span class="kpi-title">STOCK VALUE</span>
+                <div class="kpi-icon-box">💳</div>
+              </div>
+              <div class="kpi-value" style="color: var(--dash-teal);">$84,240</div>
+              <div class="kpi-meta">Valued at Landed Cost</div>
+            </div>
+          </div>
+
+          <div class="dash-two-col">
+            <div class="dash-card">
+              <div class="dash-card-title">
+                <span>Sales Overview</span>
+                <div style="font-size: 0.8125rem; color: var(--dash-text-muted);">Today: <strong style="color: var(--dash-teal);">$4,820</strong> | Week: <strong>$28,460</strong></div>
+              </div>
+              <div class="css-bar-chart">
+                <div class="chart-bar-group" data-val="$2,400">
+                  <div class="chart-bar-wrapper">
+                    <div class="chart-bar" style="height: 52%;"></div>
+                  </div>
+                  <span class="chart-bar-label">Mon</span>
+                </div>
+                <div class="chart-bar-group" data-val="$3,650">
+                  <div class="chart-bar-wrapper">
+                    <div class="chart-bar" style="height: 72%;"></div>
+                  </div>
+                  <span class="chart-bar-label">Tue</span>
+                </div>
+                <div class="chart-bar-group" data-val="$3,100">
+                  <div class="chart-bar-wrapper">
+                    <div class="chart-bar" style="height: 60%;"></div>
+                  </div>
+                  <span class="chart-bar-label">Wed</span>
+                </div>
+                <div class="chart-bar-group" data-val="$4,200">
+                  <div class="chart-bar-wrapper">
+                    <div class="chart-bar" style="height: 85%;"></div>
+                  </div>
+                  <span class="chart-bar-label">Thu</span>
+                </div>
+                <div class="chart-bar-group active" data-val="$4,820">
+                  <div class="chart-bar-wrapper">
+                    <div class="chart-bar" style="height: 100%;"></div>
+                  </div>
+                  <span class="chart-bar-label">Fri</span>
+                </div>
+                <div class="chart-bar-group" data-val="$3,900">
+                  <div class="chart-bar-wrapper">
+                    <div class="chart-bar" style="height: 78%;"></div>
+                  </div>
+                  <span class="chart-bar-label">Sat</span>
+                </div>
+                <div class="chart-bar-group" data-val="$2,850">
+                  <div class="chart-bar-wrapper">
+                    <div class="chart-bar" style="height: 58%;"></div>
+                  </div>
+                  <span class="chart-bar-label">Sun</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="dash-card">
+              <div class="dash-card-title">Inventory Health</div>
+              <div style="margin-block: 16px;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.875rem; margin-bottom: 6px;">
+                  <span>Healthy Stock</span><strong>78%</strong>
+                </div>
+                <div style="height: 10px; background: var(--dash-border); border-radius: 5px; overflow: hidden; margin-bottom: 16px;">
+                  <div style="height: 100%; width: 78%; background: var(--dash-teal);"></div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; font-size: 0.875rem; margin-bottom: 6px;">
+                  <span>Low Stock Buffer</span><strong>14%</strong>
+                </div>
+                <div style="height: 10px; background: var(--dash-border); border-radius: 5px; overflow: hidden; margin-bottom: 16px;">
+                  <div style="height: 100%; width: 14%; background: #F59E0B;"></div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; font-size: 0.875rem; margin-bottom: 6px;">
+                  <span>Out of Stock</span><strong>8%</strong>
+                </div>
+                <div style="height: 10px; background: var(--dash-border); border-radius: 5px; overflow: hidden;">
+                  <div style="height: 100%; width: 8%; background: #EF4444;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="dash-card">
+            <div class="dash-card-title">
+              <span>Top Moving Products</span>
+              <button class="nav-item-btn js-dash-nav" data-target="inventory" style="width: auto; padding: 4px 12px; font-size: 0.8125rem;">View Full Inventory →</button>
+            </div>
+            <div class="table-responsive">
+              <table class="dash-table">
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th>SKU</th>
+                    <th>Stock Balance</th>
+                    <th>Units Sold Today</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Classic Cotton Shirt</strong></td>
+                    <td>SH-104</td>
+                    <td>42 units</td>
+                    <td>18 sold</td>
+                    <td><span class="badge badge-teal">Healthy</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Canvas Tote Bag</strong></td>
+                    <td>CT-208</td>
+                    <td>8 units</td>
+                    <td>26 sold</td>
+                    <td><span class="badge badge-dark">Low Stock</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Ceramic Mug</strong></td>
+                    <td>MG-301</td>
+                    <td>0 units</td>
+                    <td>14 sold</td>
+                    <td><span class="badge badge-dark" style="color: #EF4444;">Out of Stock</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 02: INVENTORY -->
+        <section class="view-panel" id="view-inventory">
+          <div class="dash-header-row">
+            <div>
+              <h2 style="font-size: 1.5rem;">INVENTORY MANAGEMENT</h2>
+              <p class="dash-subtitle">View stock counts, safety limits, and trigger stock adjustments.</p>
+            </div>
+          </div>
+
+          <div class="dash-card">
+            <div class="table-responsive">
+              <table class="dash-table">
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th>SKU</th>
+                    <th>Category</th>
+                    <th>Location</th>
+                    <th>Stock</th>
+                    <th>Reorder Level</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Classic Cotton Shirt</td>
+                    <td>SH-104</td>
+                    <td>Apparel</td>
+                    <td>Main Store</td>
+                    <td><strong>42</strong></td>
+                    <td>15</td>
+                    <td><span class="badge badge-teal">Healthy</span></td>
+                    <td><button class="btn btn-secondary js-open-adjust-modal" style="padding: 4px 10px; font-size: 0.75rem;">Adjust Stock</button></td>
+                  </tr>
+                  <tr>
+                    <td>Canvas Tote Bag</td>
+                    <td>CT-208</td>
+                    <td>Accessories</td>
+                    <td>Downtown Branch</td>
+                    <td><strong>8</strong></td>
+                    <td>10</td>
+                    <td><span class="badge badge-dark">Low Stock</span></td>
+                    <td><button class="btn btn-secondary js-open-adjust-modal" style="padding: 4px 10px; font-size: 0.75rem;">Adjust Stock</button></td>
+                  </tr>
+                  <tr>
+                    <td>Ceramic Mug</td>
+                    <td>MG-301</td>
+                    <td>Homeware</td>
+                    <td>Warehouse</td>
+                    <td><strong>0</strong></td>
+                    <td>20</td>
+                    <td><span class="badge badge-dark" style="color:#EF4444;">Out of Stock</span></td>
+                    <td><button class="btn btn-secondary js-open-adjust-modal" style="padding: 4px 10px; font-size: 0.75rem;">Adjust Stock</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 03: PURCHASE ORDERS -->
+        <section class="view-panel" id="view-purchase-orders">
+          <div class="dash-header-row">
+            <div>
+              <h2 style="font-size: 1.5rem;">PURCHASE ORDERS</h2>
+              <p class="dash-subtitle">Vendor orders, draft requests, and incoming dock receipts.</p>
+            </div>
+            <button class="btn btn-primary js-create-po-btn" style="padding: 10px 18px;">+ CREATE PURCHASE ORDER</button>
+          </div>
+
+          <div style="display: flex; gap: 8px; margin-bottom: 20px;">
+            <button class="btn btn-secondary js-po-filter active" data-status="all">All Orders</button>
+            <button class="btn btn-secondary js-po-filter" data-status="pending">Pending</button>
+            <button class="btn btn-secondary js-po-filter" data-status="received">Received</button>
+          </div>
+
+          <div class="dash-card">
+            <div class="table-responsive">
+              <table class="dash-table">
+                <thead>
+                  <tr>
+                    <th>PO Number</th>
+                    <th>Supplier</th>
+                    <th>Items Count</th>
+                    <th>Total Value</th>
+                    <th>Order Date</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="js-po-row" data-status="pending">
+                    <td><strong>PO-2048</strong></td>
+                    <td>Northline Supplies</td>
+                    <td>12 items</td>
+                    <td>$2,480</td>
+                    <td>Sep 18, 2026</td>
+                    <td><span class="badge badge-dark">Pending</span></td>
+                  </tr>
+                  <tr class="js-po-row" data-status="received">
+                    <td><strong>PO-2047</strong></td>
+                    <td>Urban Wholesale</td>
+                    <td>45 items</td>
+                    <td>$1,820</td>
+                    <td>Sep 14, 2026</td>
+                    <td><span class="badge badge-teal">Received</span></td>
+                  </tr>
+                  <tr class="js-po-row" data-status="pending">
+                    <td><strong>PO-2046</strong></td>
+                    <td>Daily Goods</td>
+                    <td>8 items</td>
+                    <td>$920</td>
+                    <td>Sep 10, 2026</td>
+                    <td><span class="badge badge-dark">Processing</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 04: LOW STOCK ALERTS -->
+        <section class="view-panel" id="view-alerts">
+          <div class="dash-header-row">
+            <div>
+              <h2 style="font-size: 1.5rem;">LOW STOCK ALERTS</h2>
+              <p class="dash-subtitle">Proactive notifications for items below safety reorder threshold.</p>
+            </div>
+          </div>
+
+          <div class="dash-card" style="border-inline-start: 4px solid #EF4444;">
+            <h3 style="font-size: 1.125rem; color: #EF4444; margin-bottom: 12px;">CRITICAL OUT OF STOCK (1)</h3>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: var(--dash-bg); border-radius: 8px;">
+              <div>
+                <strong>Ceramic Mug (MG-301)</strong>
+                <span style="font-size: 0.8125rem; color: var(--dash-text-muted); display: block;">Current Stock: 0 | Reorder Level: 20</span>
+              </div>
+              <button class="btn btn-primary js-create-po-btn" style="padding: 8px 14px; font-size: 0.8125rem;">Create PO Draft →</button>
+            </div>
+          </div>
+
+          <div class="dash-card" style="border-inline-start: 4px solid #F59E0B;">
+            <h3 style="font-size: 1.125rem; color: #F59E0B; margin-bottom: 12px;">LOW STOCK WARNING (1)</h3>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: var(--dash-bg); border-radius: 8px;">
+              <div>
+                <strong>Canvas Tote Bag (CT-208)</strong>
+                <span style="font-size: 0.8125rem; color: var(--dash-text-muted); display: block;">Current Stock: 8 | Reorder Level: 10</span>
+              </div>
+              <button class="btn btn-primary js-create-po-btn" style="padding: 8px 14px; font-size: 0.8125rem;">Create PO Draft →</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 05: SALES REPORTS -->
+        <section class="view-panel" id="view-sales-reports">
+          <div class="dash-header-row">
+            <div>
+              <h2 style="font-size: 1.5rem;">SALES REPORTS</h2>
+              <p class="dash-subtitle">Analyze retail gross profit, transaction counts, and product velocity.</p>
+            </div>
+          </div>
+
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <span class="kpi-title">TOTAL SALES</span>
+              <div class="kpi-value" style="color: var(--dash-teal);">$96,240</div>
+              <div class="kpi-meta">Last 30 Days</div>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-title">TOTAL TRANSACTIONS</span>
+              <div class="kpi-value">1,420</div>
+              <div class="kpi-meta">Average $67.70 / order</div>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-title">TOP CATEGORY</span>
+              <div class="kpi-value">Apparel</div>
+              <div class="kpi-meta">48% of gross revenue</div>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-title">GROSS MARGIN</span>
+              <div class="kpi-value">58.4%</div>
+              <div class="kpi-meta">Healthy Profit Velocity</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 06: INVENTORY REPORTS -->
+        <section class="view-panel" id="view-inventory-reports">
+          <div class="dash-header-row">
+            <div>
+              <h2 style="font-size: 1.5rem;">INVENTORY REPORTS & VALUATION</h2>
+              <p class="dash-subtitle">Audit-ready inventory valuation and dead stock analysis.</p>
+            </div>
+          </div>
+
+          <div class="dash-card">
+            <h3 style="font-size: 1.125rem; margin-bottom: 16px;">Stock Valuation Summary</h3>
+            <div style="font-size: 2.25rem; font-weight: 800; color: var(--dash-teal);">$84,240</div>
+            <p style="font-size: 0.875rem; color: var(--dash-text-muted);">Total landed cost value across 1,248 active retail units.</p>
+          </div>
+        </section>
+
+        <!-- VIEW 07: LOCATIONS -->
+        <section class="view-panel" id="view-locations">
+          <div class="dash-header-row">
+            <div>
+              <h2 style="font-size: 1.5rem;">STORE LOCATIONS & WAREHOUSES</h2>
+              <p class="dash-subtitle">Manage store branches, inventory distribution, and central fulfillment hubs.</p>
+            </div>
+            <button class="btn btn-primary" onclick="alert('Add Location simulation')" style="padding: 10px 18px;">+ ADD NEW LOCATION</button>
+          </div>
+
+          <div class="network-grid">
+            <!-- Location 01 -->
+            <div class="location-card">
+              <div class="location-card-header">
+                <div class="location-icon-box">🏪</div>
+                <div>
+                  <span class="badge badge-teal" style="font-size: 0.6875rem;">PRIMARY STORE</span>
+                  <h3 class="location-title">MAIN STORE</h3>
+                </div>
+              </div>
+              <p class="location-address">📍 742 Broadway Ave, Downtown • Mgr: Sarah J.</p>
+              
+              <div class="location-metrics-grid">
+                <div class="location-metric">
+                  <span class="location-metric-label">Products</span>
+                  <span class="location-metric-value">842</span>
+                </div>
+                <div class="location-metric">
+                  <span class="location-metric-label">Stock Value</span>
+                  <span class="location-metric-value" style="color: var(--dash-teal);">$42,820</span>
+                </div>
+              </div>
+
+              <div class="location-card-footer">
+                <span class="badge badge-dark" style="color: #EF4444; background: rgba(239, 68, 68, 0.12);">⚠️ 8 Low Stock Items</span>
+                <button class="nav-item-btn js-dash-nav" data-target="inventory" style="width: auto; padding: 4px 10px; font-size: 0.8125rem;">Stock →</button>
+              </div>
+            </div>
+
+            <!-- Location 02 -->
+            <div class="location-card">
+              <div class="location-card-header">
+                <div class="location-icon-box" style="background: rgba(99, 102, 241, 0.12); color: #6366F1;">🏢</div>
+                <div>
+                  <span class="badge badge-dark" style="font-size: 0.6875rem;">RETAIL BRANCH</span>
+                  <h3 class="location-title">DOWNTOWN BRANCH</h3>
+                </div>
+              </div>
+              <p class="location-address">📍 104 West 4th St, Bay District • Mgr: Marcus K.</p>
+              
+              <div class="location-metrics-grid">
+                <div class="location-metric">
+                  <span class="location-metric-label">Products</span>
+                  <span class="location-metric-value">526</span>
+                </div>
+                <div class="location-metric">
+                  <span class="location-metric-label">Stock Value</span>
+                  <span class="location-metric-value" style="color: var(--dash-teal);">$28,640</span>
+                </div>
+              </div>
+
+              <div class="location-card-footer">
+                <span class="badge badge-dark" style="color: #EF4444; background: rgba(239, 68, 68, 0.12);">⚠️ 6 Low Stock Items</span>
+                <button class="nav-item-btn js-dash-nav" data-target="inventory" style="width: auto; padding: 4px 10px; font-size: 0.8125rem;">Stock →</button>
+              </div>
+            </div>
+
+            <!-- Location 03 -->
+            <div class="location-card central">
+              <div class="location-card-header">
+                <div class="location-icon-box" style="background: rgba(16, 185, 129, 0.12); color: #10B981;">🏭</div>
+                <div>
+                  <span class="badge badge-teal" style="font-size: 0.6875rem;">CENTRAL HUB</span>
+                  <h3 class="location-title">MAIN WAREHOUSE</h3>
+                </div>
+              </div>
+              <p class="location-address">📍 88 Logistics Way, Industrial Park • Mgr: David R.</p>
+              
+              <div class="location-metrics-grid">
+                <div class="location-metric">
+                  <span class="location-metric-label">Products</span>
+                  <span class="location-metric-value">1,240</span>
+                </div>
+                <div class="location-metric">
+                  <span class="location-metric-label">Stock Value</span>
+                  <span class="location-metric-value" style="color: var(--dash-teal);">$62,400</span>
+                </div>
+              </div>
+
+              <div class="location-card-footer">
+                <span class="badge badge-teal">✓ 4 Low Stock Items</span>
+                <button class="nav-item-btn js-dash-nav" data-target="inventory" style="width: auto; padding: 4px 10px; font-size: 0.8125rem;">Stock →</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 08: SUPPLIERS -->
+        <section class="view-panel" id="view-suppliers">
+          <div class="dash-header-row">
+            <div>
+              <h2 style="font-size: 1.5rem;">SUPPLIERS & VENDORS</h2>
+              <p class="dash-subtitle">Directory of active wholesale vendors and ordering terms.</p>
+            </div>
+          </div>
+
+          <div class="dash-card">
+            <div class="table-responsive">
+              <table class="dash-table">
+                <thead>
+                  <tr>
+                    <th>Supplier Name</th>
+                    <th>Category</th>
+                    <th>Open POs</th>
+                    <th>Last Order</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Northline Supplies</strong></td>
+                    <td>Apparel</td>
+                    <td>3 Open</td>
+                    <td>Sep 12, 2026</td>
+                    <td><span class="badge badge-teal">Active</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Urban Wholesale</strong></td>
+                    <td>Lifestyle</td>
+                    <td>2 Open</td>
+                    <td>Sep 10, 2026</td>
+                    <td><span class="badge badge-teal">Active</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Daily Goods</strong></td>
+                    <td>General</td>
+                    <td>1 Open</td>
+                    <td>Sep 08, 2026</td>
+                    <td><span class="badge badge-teal">Active</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 09: BILLING -->
+        <section class="view-panel" id="view-billing">
+          <div class="dash-header-row">
+            <div>
+              <h2 style="font-size: 1.5rem;">SUBSCRIPTION & BILLING</h2>
+              <p class="dash-subtitle">Manage your StockFlow retail workspace plan, payment methods, and invoices.</p>
+            </div>
+            <button class="btn btn-primary" onclick="alert('Upgrade Plan Modal Simulation')" style="padding: 10px 18px;">⚡ UPGRADE TO ENTERPRISE</button>
+          </div>
+
+          <!-- Billing Top Grid (Plan & Payment Method) -->
+          <div class="billing-grid-top">
+            <!-- Current Plan Card -->
+            <div class="dash-card billing-plan-card">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+                <div>
+                  <span class="badge badge-teal" style="font-size: 0.6875rem;">ACTIVE SUBSCRIPTION</span>
+                  <h3 style="font-size: 1.5rem; margin-top: 8px; font-weight: 800;">Growth Plan</h3>
+                  <p style="font-size: 0.8125rem; color: var(--dash-text-muted);">Billed annually • Next renewal date: <strong>October 01, 2026</strong></p>
+                </div>
+                <div style="text-align: end;">
+                  <span style="font-size: 2rem; font-weight: 800; color: var(--dash-teal); font-family: var(--font-heading);">$49</span>
+                  <span style="font-size: 0.8125rem; color: var(--dash-text-muted);">/ mo</span>
+                </div>
+              </div>
+
+              <!-- Included Features List -->
+              <div class="billing-features-list">
+                <div class="billing-feature-item">✓ <strong>Up to 5</strong> Store Locations</div>
+                <div class="billing-feature-item">✓ <strong>Unlimited</strong> Stock SKUs</div>
+                <div class="billing-feature-item">✓ <strong>Automated PO</strong> & Vendor Sync</div>
+                <div class="billing-feature-item">✓ <strong>24/7 Priority</strong> Retailer Support</div>
+              </div>
+
+              <div style="display: flex; gap: 12px; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--dash-border);">
+                <button class="btn btn-secondary" onclick="alert('Change Plan Simulation')">Change Plan</button>
+                <button class="btn btn-secondary" onclick="alert('Cancel Subscription Simulation')" style="color: #EF4444; border-color: rgba(239,68,68,0.3);">Cancel Plan</button>
+              </div>
+            </div>
+
+            <!-- Payment Method Card -->
+            <div class="dash-card">
+              <div class="dash-card-title">
+                <span>Payment Method</span>
+                <button class="nav-item-btn js-dash-nav" style="width: auto; padding: 4px 8px; font-size: 0.75rem;" onclick="alert('Edit Payment Simulation')">Edit</button>
+              </div>
+
+              <div class="payment-card-preview">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                  <span style="font-size: 1.125rem; font-weight: 800; letter-spacing: 0.1em; color: var(--dash-teal);">VISA</span>
+                  <span style="font-size: 0.75rem; background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px;">DEFAULT</span>
+                </div>
+                <div style="font-size: 1.125rem; font-weight: 700; letter-spacing: 0.15em; margin-bottom: 16px;">•••• •••• •••• 4821</div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: rgba(255, 255, 255, 0.75);">
+                  <span>EXPIRES: <strong>08/28</strong></span>
+                  <span>JORDAN LEE</span>
+                </div>
+              </div>
+
+              <button class="btn btn-secondary" style="width: 100%; justify-content: center; margin-top: 16px; font-size: 0.8125rem;" onclick="alert('Add Payment Method Simulation')">+ Add Backup Payment Method</button>
+            </div>
+          </div>
+
+          <!-- Quotas & Plan Usage Card -->
+          <div class="dash-card" style="margin-bottom: 28px;">
+            <div class="dash-card-title">Resource & Plan Usage</div>
+            <div class="usage-grid">
+              <div class="usage-item">
+                <div style="display: flex; justify-content: space-between; font-size: 0.84375rem; margin-bottom: 6px;">
+                  <span>Store Locations</span><strong>3 / 5 Active</strong>
+                </div>
+                <div class="usage-bar-bg">
+                  <div class="usage-bar-fill" style="width: 60%;"></div>
+                </div>
+              </div>
+
+              <div class="usage-item">
+                <div style="display: flex; justify-content: space-between; font-size: 0.84375rem; margin-bottom: 6px;">
+                  <span>Monthly PO & API Syncs</span><strong>1,420 / 5,000</strong>
+                </div>
+                <div class="usage-bar-bg">
+                  <div class="usage-bar-fill" style="width: 28.4%; background: #6366F1;"></div>
+                </div>
+              </div>
+
+              <div class="usage-item">
+                <div style="display: flex; justify-content: space-between; font-size: 0.84375rem; margin-bottom: 6px;">
+                  <span>Team Manager Seats</span><strong>4 / 10 Seats</strong>
+                </div>
+                <div class="usage-bar-bg">
+                  <div class="usage-bar-fill" style="width: 40%; background: #10B981;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Billing & Invoices Table -->
+          <div class="dash-card">
+            <div class="dash-card-title">
+              <span>Billing History & Invoices</span>
+              <button class="btn btn-secondary" onclick="alert('Export all invoices simulation')" style="padding: 4px 12px; font-size: 0.8125rem;">Export CSV</button>
+            </div>
+
+            <div class="table-responsive">
+              <table class="dash-table">
+                <thead>
+                  <tr>
+                    <th>Invoice ID</th>
+                    <th>Billing Date</th>
+                    <th>Amount</th>
+                    <th>Plan</th>
+                    <th>Status</th>
+                    <th>Receipt</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>INV-2026-009</strong></td>
+                    <td>Sep 01, 2026</td>
+                    <td>$49.00 USD</td>
+                    <td>Growth Plan (Annual)</td>
+                    <td><span class="badge badge-teal">Paid</span></td>
+                    <td><button class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.75rem;" onclick="alert('Downloading invoice PDF simulation')">PDF 📄</button></td>
+                  </tr>
+                  <tr>
+                    <td><strong>INV-2026-008</strong></td>
+                    <td>Aug 01, 2026</td>
+                    <td>$49.00 USD</td>
+                    <td>Growth Plan (Annual)</td>
+                    <td><span class="badge badge-teal">Paid</span></td>
+                    <td><button class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.75rem;" onclick="alert('Downloading invoice PDF simulation')">PDF 📄</button></td>
+                  </tr>
+                  <tr>
+                    <td><strong>INV-2026-007</strong></td>
+                    <td>Jul 01, 2026</td>
+                    <td>$49.00 USD</td>
+                    <td>Growth Plan (Annual)</td>
+                    <td><span class="badge badge-teal">Paid</span></td>
+                    <td><button class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.75rem;" onclick="alert('Downloading invoice PDF simulation')">PDF 📄</button></td>
+                  </tr>
+                  <tr>
+                    <td><strong>INV-2026-006</strong></td>
+                    <td>Jun 01, 2026</td>
+                    <td>$49.00 USD</td>
+                    <td>Growth Plan (Annual)</td>
+                    <td><span class="badge badge-teal">Paid</span></td>
+                    <td><button class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.75rem;" onclick="alert('Downloading invoice PDF simulation')">PDF 📄</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 10: SETTINGS -->
+        <section class="view-panel" id="view-settings">
+          <div class="dash-header-row">
+            <div>
+              <h2 style="font-size: 1.5rem;">STORE SETTINGS</h2>
+              <p class="dash-subtitle">Configure store profile, currency, and safety threshold rules.</p>
+            </div>
+          </div>
+
+          <div class="dash-card" style="max-width: 600px;">
+            <div class="form-group">
+              <label class="form-label">Store Name</label>
+              <input type="text" class="form-input" value="Northline Market">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Work Email</label>
+              <input type="email" class="form-input" value="retailer@example.com">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Default Reorder Safety Threshold</label>
+              <input type="number" class="form-input" value="10">
+            </div>
+            <button class="btn btn-primary js-save-settings-btn">SAVE CHANGES</button>
+          </div>
+        </section>
+
+        <!-- VIEW 11: HELP & SUPPORT -->
+        <section class="view-panel" id="view-help">
+          <div class="dash-header-row">
+            <div>
+              <h2 style="font-size: 1.5rem;">HELP & SUPPORT</h2>
+              <p class="dash-subtitle">Frequently asked questions and retail help documentation.</p>
+            </div>
+          </div>
+
+          <div class="accordion-item active">
+            <button class="accordion-header">
+              <span>How do I add inventory items?</span> <span>▼</span>
+            </button>
+            <div class="accordion-content">
+              Navigate to the Inventory menu, click "Add Product", scan or type the barcode SKU, and enter initial shelf quantities.
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <button class="accordion-header">
+              <span>How do low-stock alerts work?</span> <span>▼</span>
+            </button>
+            <div class="accordion-content">
+              StockFlow automatically compares current balance with minimum safety threshold rules and pushes real-time alerts.
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <button class="accordion-header">
+              <span>How do I create a purchase order?</span> <span>▼</span>
+            </button>
+            <div class="accordion-content">
+              Go to Purchase Orders, select a vendor, add item quantities, and click "Submit Order" to generate a vendor receipt.
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Slide-out Notification Drawer -->
+  <div class="notification-drawer" id="notificationDrawer">
+    <div class="notification-header">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <h3 style="font-size: 1.125rem; font-weight: 800;">Notifications</h3>
+        <span class="badge badge-teal" style="font-size: 0.75rem; padding: 2px 8px;">3 New</span>
+      </div>
+      <button class="drawer-close-btn" id="closeNotifBtn" aria-label="Close Notifications" title="Close Drawer">&times;</button>
+    </div>
+
+    <div class="notification-list">
+      <div class="notification-item unread">
+        <div class="notif-item-header">
+          <span class="badge badge-dark" style="color: #EF4444; background: rgba(239, 68, 68, 0.12); font-size: 0.6875rem;">⚠️ LOW STOCK</span>
+          <span class="notif-timestamp">10m ago</span>
+        </div>
+        <strong class="notif-item-title">8 Products Below Reorder Level</strong>
+        <p class="notif-item-desc">Ceramic Mug (0 left) and Canvas Tote Bag (8 left) require immediate reordering.</p>
+      </div>
+
+      <div class="notification-item unread">
+        <div class="notif-item-header">
+          <span class="badge badge-teal" style="font-size: 0.6875rem;">📄 PURCHASE ORDER</span>
+          <span class="notif-timestamp">1h ago</span>
+        </div>
+        <strong class="notif-item-title">PO-2048 Awaiting Approval</strong>
+        <p class="notif-item-desc">Purchase order draft for Northline Supplies ($2,480) requires manager sign-off.</p>
+      </div>
+
+      <div class="notification-item">
+        <div class="notif-item-header">
+          <span class="badge badge-dark" style="font-size: 0.6875rem;">🏪 STORE SYNC</span>
+          <span class="notif-timestamp">3h ago</span>
+        </div>
+        <strong class="notif-item-title">Downtown Branch Auto-Synced</strong>
+        <p class="notif-item-desc">Stock inventory counts and daily sales reports updated cleanly.</p>
+      </div>
+    </div>
+
+    <div class="notification-drawer-footer">
+      <button class="btn btn-secondary" id="markReadBtn" style="width: 100%; justify-content: center;">Mark All As Read</button>
+    </div>
+  </div>
+
+  <!-- Stock Adjustment Modal -->
+  <div class="modal-overlay" id="adjustStockModal">
+    <div class="modal-box">
+      <h3 style="font-size: 1.25rem; margin-bottom: 8px;">Adjust Stock Quantity</h3>
+      <p style="font-size: 0.875rem; color: var(--dash-text-muted); margin-bottom: 20px;" id="modalItemTitle">Selected Product</p>
+      <form id="adjustStockForm">
+        <div class="form-group">
+          <label class="form-label">New Stock Quantity</label>
+          <input type="number" class="form-input" value="50" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Adjustment Reason</label>
+          <select class="form-input">
+            <option>Stock Received from Supplier</option>
+            <option>Manual Count Adjustment</option>
+            <option>Damaged / Expired Item</option>
+          </select>
+        </div>
+        <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px;">
+          <button type="button" class="btn btn-secondary" id="closeStockModalBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Update Quantity</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Success Toast -->
+  <div class="toast-notification" id="toastNotification">
+    <span style="color: var(--dash-teal); font-weight: 800;">✓</span>
+    <span id="toastText">Action completed successfully.</span>
+  </div>
+
+  <script src="assets/js/dashboard.js"></script>
+</body>
+</html>

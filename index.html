@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StockFlow | Retail Inventory OS - SaaS Software for Small Retailers</title>
+  <meta name="description" content="Manage store inventory, sync multi-channel stock levels, automate reorders, and optimize retail profit margins with StockFlow SaaS.">
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+  <script>
+    (function() {
+      function safeGet(key, def) {
+        try { return localStorage.getItem(key) || def; } catch(e) { return def; }
+      }
+      function safeSet(key, val) {
+        try { localStorage.setItem(key, val); } catch(e) {}
+      }
+      window.applyTheme = function(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        safeSet('stockflow_theme', theme);
+        var btns = document.querySelectorAll('.js-theme-toggle');
+        for(var i=0; i<btns.length; i++) {
+          btns[i].innerHTML = theme === 'dark' ? '☀️' : '🌙';
+        }
+      };
+      window.toggleTheme = function() {
+        var curr = document.documentElement.getAttribute('data-theme') || 'light';
+        window.applyTheme(curr === 'dark' ? 'light' : 'dark');
+      };
+      window.applyRTL = function(dir) {
+        document.documentElement.setAttribute('dir', dir);
+        safeSet('stockflow_rtl', dir);
+        var btns = document.querySelectorAll('.js-rtl-toggle');
+        for(var i=0; i<btns.length; i++) {
+          btns[i].innerHTML = '⇄';
+        }
+      };
+      window.toggleRTL = function() {
+        var curr = document.documentElement.getAttribute('dir') || 'ltr';
+        window.applyRTL(curr === 'rtl' ? 'ltr' : 'rtl');
+      };
+      window.openMobileMenu = function() {
+        var mobileMenu = document.getElementById('mobileMenu');
+        if (mobileMenu) {
+          mobileMenu.classList.add('active');
+          document.body.style.overflow = 'hidden';
+        }
+      };
+      window.closeMobileMenu = function() {
+        var mobileMenu = document.getElementById('mobileMenu');
+        if (mobileMenu) {
+          mobileMenu.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      };
+      window.toggleMobileMenu = function() {
+        var mobileMenu = document.getElementById('mobileMenu');
+        if (mobileMenu) {
+          if (mobileMenu.classList.contains('active')) {
+            window.closeMobileMenu();
+          } else {
+            window.openMobileMenu();
+          }
+        }
+      };
+      var initTheme = safeGet('stockflow_theme', 'light');
+      var initRTL = safeGet('stockflow_rtl', 'ltr');
+      document.documentElement.setAttribute('data-theme', initTheme);
+      document.documentElement.setAttribute('dir', initRTL);
+    })();
+  </script>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <!-- ==========================================================================
+       NAVBAR
+       ========================================================================== -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo" id="navLogo">
+        <div class="brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">STOCKFLOW</span>
+          <span class="brand-desc">RETAIL INVENTORY OS</span>
+        </div>
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link active">Home</a></li>
+          <li><a href="home-2.html" class="nav-link">Home 2</a></li>
+          <li><a href="about.html" class="nav-link">About</a></li>
+          <li><a href="features.html" class="nav-link">Features</a></li>
+          <li><a href="pricing.html" class="nav-link">Pricing</a></li>
+          <li><a href="integrations.html" class="nav-link">Integrations</a></li>
+          <li><a href="contact.html" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+
+      <!-- Desktop Controls & CTA -->
+      <div class="nav-actions">
+        <button class="control-btn js-theme-toggle" id="desktopThemeBtn" title="Toggle Theme" onclick="toggleTheme()">🌙</button>
+        <button class="control-btn js-rtl-toggle" id="desktopRTLBtn" title="Toggle RTL" onclick="toggleRTL()">⇄</button>
+        <a href="dashboard.html" class="control-btn" title="Dashboard" style="font-size:1.1rem;">📊</a>
+        <a href="login.html" class="btn btn-primary">Login →</a>
+      </div>
+
+      <!-- Hamburger for Mobile -->
+      <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle Navigation Menu" onclick="openMobileMenu()">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-overlay" onclick="closeMobileMenu()"></div>
+    <div class="mobile-drawer">
+      <div>
+        <div class="mobile-drawer-header">
+          <div class="brand-logo">
+            <div class="brand-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                <polyline points="9 22 9 12 15 12 15 22"/>
+              </svg>
+            </div>
+            <div class="brand-text">
+              <span class="brand-name">STOCKFLOW</span>
+              <span class="brand-desc">RETAIL INVENTORY OS</span>
+            </div>
+          </div>
+          <button type="button" class="mobile-close-btn" id="closeMenuBtn" onclick="closeMobileMenu()">&times;</button>
+        </div>
+
+        <ul class="mobile-nav-links">
+          <li><a href="index.html" class="mobile-nav-link active">Home</a></li>
+          <li><a href="home-2.html" class="mobile-nav-link">Home 2</a></li>
+          <li><a href="about.html" class="mobile-nav-link">About</a></li>
+          <li><a href="features.html" class="mobile-nav-link">Features</a></li>
+          <li><a href="pricing.html" class="mobile-nav-link">Pricing</a></li>
+          <li><a href="integrations.html" class="mobile-nav-link">Integrations</a></li>
+          <li><a href="contact.html" class="mobile-nav-link">Contact</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="mobile-controls">
+          <div class="mobile-controls-row">
+            <button class="control-btn js-theme-toggle" style="flex:1;" title="Toggle Theme" onclick="toggleTheme()">🌙</button>
+            <button class="control-btn js-rtl-toggle" style="flex:1;" title="Toggle RTL" onclick="toggleRTL()">⇄</button>
+            <a href="dashboard.html" class="control-btn" style="flex:1; text-align:center; font-size:1.1rem;" title="Dashboard">📊</a>
+          </div>
+          <a href="login.html" class="btn btn-primary" style="width: 100%;">Login →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       SECTION 01 — HERO
+       ========================================================================== -->
+  <section class="section hero-section" style="
+    background-image: url('assets/img/hero-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    overflow: hidden;
+  ">
+    <!-- Overlay layers for readability -->
+    <div style="
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        linear-gradient(105deg, rgba(10,14,28,0.88) 0%, rgba(10,14,28,0.65) 55%, rgba(10,14,28,0.30) 100%),
+        radial-gradient(ellipse 70% 90% at 75% 50%, rgba(25,181,165,0.12) 0%, transparent 70%);
+    "></div>
+
+    <!-- Unique Retail Inventory Background Animation Layer -->
+    <div class="hero-bg-anim-container">
+      <div class="hero-grid-mesh"></div>
+      <div class="hero-ambient-glow"></div>
+      <canvas id="heroBgCanvas"></canvas>
+      <div class="hero-scanner-beam"></div>
+    </div>
+
+    <div class="container hero-split" style="position: relative; z-index: 1;">
+      <div class="hero-content">
+        <span class="eyebrow" style="background: rgba(10, 24, 36, 0.94); border: 1px solid rgba(25,181,165,0.45); color: #0EEDC8; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);">RETAIL INVENTORY, WITHOUT THE SPREADSHEETS.</span>
+        <h1 class="hero-title" style="color: #FFFFFF;">KNOW WHAT'S IN STOCK. KNOW WHAT TO DO NEXT.</h1>
+        <p class="hero-subtitle" style="color: rgba(255,255,255,0.78);">
+          StockFlow helps small retailers track inventory, manage purchase orders, monitor low-stock products and understand sales performance from one simple workspace.
+        </p>
+        <div class="btn-group">
+          <a href="pricing.html" class="btn btn-primary">START FREE →</a>
+          <a href="#section-problem" class="btn btn-navy-secondary" style="border-color: rgba(255,255,255,0.25);">SEE HOW IT WORKS →</a>
+        </div>
+      </div>
+
+      <!-- Layered SaaS UI Dashboard Visual -->
+      <div class="hero-mockup-wrapper">
+        <div class="mockup-card">
+          <div class="mockup-header">
+            <div class="mockup-dot active"></div>
+            <div class="mockup-dot"></div>
+            <div class="mockup-dot"></div>
+            <span style="color: #98A2B3; font-size: 0.75rem; margin-inline-start: 12px; font-family: var(--font-heading);">stockflow-app.com/overview</span>
+          </div>
+          <div class="mockup-body">
+            <div class="mockup-stats-row">
+              <div class="mini-stat">
+                <span class="mini-stat-label">Total SKUs</span>
+                <div class="mini-stat-val" data-counter="1248">1,248</div>
+              </div>
+              <div class="mini-stat">
+                <span class="mini-stat-label">Stock Value</span>
+                <div class="mini-stat-val" style="color: var(--brand-teal);" data-counter="84240" data-prefix="$">$84,240</div>
+              </div>
+              <div class="mini-stat">
+                <span class="mini-stat-label">Low Stock</span>
+                <div class="mini-stat-val" data-counter="18">18</div>
+              </div>
+            </div>
+
+            <!-- Mini Product Table Preview -->
+            <div style="background: var(--bg-surface-elevated); border-radius: 8px; border: 1px solid var(--border-color); padding: 12px;">
+              <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase;">Recent Stock Movement</div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.8125rem; padding-block: 6px; border-bottom: 1px solid var(--border-color);">
+                <span>Classic Cotton Shirt (SH-104)</span>
+                <span style="font-weight: 700;">42 in stock</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.8125rem; padding-block: 6px; border-bottom: 1px solid var(--border-color);">
+                <span>Canvas Tote Bag (CT-208)</span>
+                <span style="font-weight: 700; color: var(--brand-teal);">8 Low Stock</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.8125rem; padding-block: 6px;">
+                <span>Ceramic Mug (MG-301)</span>
+                <span style="font-weight: 700;">14 sold today</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Floating Alert Badge -->
+        <div class="mockup-floating-badge">
+          <div class="pulse-dot" style="width: 10px; height: 10px; border-radius: 50%; background: var(--brand-teal);"></div>
+          <div>
+            <div style="font-size: 0.8125rem; font-weight: 700;">Auto Reorder Alert</div>
+            <div style="font-size: 0.75rem; color: #98A2B3;">PO-2048 pre-filled for 12 items</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SECTION 02 — INVENTORY PROBLEM
+       ========================================================================== -->
+  <section class="section" id="section-problem" style="background: var(--bg-surface-elevated); border-block: 1px solid var(--border-color);">
+    <div class="container split-grid">
+      <div class="problem-visual reveal reveal-left">
+        <div class="eyebrow">THE OLD WAY VS STOCKFLOW</div>
+        <h3 style="font-size: 1.5rem; margin-bottom: 20px;">Retail Friction Points</h3>
+        <ul class="problem-list">
+          <li class="problem-item">
+            <div class="problem-icon">✕</div>
+            <div>
+              <strong style="display: block;">Manual Stock Counts</strong>
+              <span style="font-size: 0.875rem; color: var(--text-secondary);">Counting inventory late at night using paper lists or broken spreadsheets.</span>
+            </div>
+          </li>
+          <li class="problem-item">
+            <div class="problem-icon">✕</div>
+            <div>
+              <strong style="display: block;">Missed Reorders & Stockouts</strong>
+              <span style="font-size: 0.875rem; color: var(--text-secondary);">Discovering key products are out of stock only when customers ask for them.</span>
+            </div>
+          </li>
+          <li class="problem-item">
+            <div class="problem-icon">✕</div>
+            <div>
+              <strong style="display: block;">Scattered Purchase Orders</strong>
+              <span style="font-size: 0.875rem; color: var(--text-secondary);">Supplier emails, paper invoices, and phone orders lost across staff members.</span>
+            </div>
+          </li>
+          <li class="problem-item">
+            <div class="problem-icon solution">✓</div>
+            <div>
+              <strong style="display: block; color: var(--brand-teal);">The StockFlow Solution</strong>
+              <span style="font-size: 0.875rem; color: var(--text-secondary);">Centralize stock levels, automated alerts, and supplier purchase orders in one click.</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="reveal reveal-right">
+        <span class="eyebrow">OPERATIONAL SIMPLICITY</span>
+        <h2 class="section-title">STOP GUESSING WHAT'S ON YOUR SHELVES.</h2>
+        <p class="section-desc" style="margin-bottom: 24px;">
+          Small retail businesses lose thousands of dollars each year to overstocking, phantom inventory, and stockouts. StockFlow gives store managers instant visibility into item movements, stock valuation, and reorder alerts across all sales channels.
+        </p>
+        <a href="features.html" class="btn btn-secondary">DISCOVER ALL FEATURES →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SECTION 03 — INVENTORY AUTOMATION
+       ========================================================================== -->
+  <section class="section">
+    <div class="container workflow-container reveal reveal-scale">
+      <div class="section-header text-center">
+        <span class="eyebrow">AUTOMATED WORKFLOW</span>
+        <h2 class="section-title">FROM SALE TO STOCK UPDATE — AUTOMATICALLY.</h2>
+        <p class="section-desc">Click any stage below to inspect how StockFlow keeps inventory seamlessly updated in real time.</p>
+      </div>
+
+      <div class="workflow-steps">
+        <button class="workflow-step-btn active" data-step="0" onclick="switchWorkflowStep(0)">
+          <div class="workflow-step-num">1</div>
+          <div class="workflow-step-title">SALE</div>
+        </button>
+        <button class="workflow-step-btn" data-step="1" onclick="switchWorkflowStep(1)">
+          <div class="workflow-step-num">2</div>
+          <div class="workflow-step-title">INVENTORY UPDATED</div>
+        </button>
+        <button class="workflow-step-btn" data-step="2" onclick="switchWorkflowStep(2)">
+          <div class="workflow-step-num">3</div>
+          <div class="workflow-step-title">STOCK CHECKED</div>
+        </button>
+        <button class="workflow-step-btn" data-step="3" onclick="switchWorkflowStep(3)">
+          <div class="workflow-step-num">4</div>
+          <div class="workflow-step-title">LOW-STOCK ALERT</div>
+        </button>
+        <button class="workflow-step-btn" data-step="4" onclick="switchWorkflowStep(4)">
+          <div class="workflow-step-num">5</div>
+          <div class="workflow-step-title">PURCHASE ORDER</div>
+        </button>
+      </div>
+
+      <div class="workflow-detail-box" style="transition: opacity 0.2s ease, transform 0.2s ease;">
+        <div>
+          <span class="eyebrow" id="workflowBadge">Real-time Sale Event</span>
+          <h3 id="workflowTitle" style="font-size: 1.75rem; margin-block: 12px 16px;">1. Sale Captured at POS</h3>
+          <p id="workflowDesc" style="font-size: 1.0625rem; line-height: 1.6;">
+            When an item is scanned or sold through your POS system, StockFlow instantly registers the transaction data across all linked retail channels.
+          </p>
+        </div>
+        <div id="workflowVisualCardContainer" style="overflow: hidden; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: var(--shadow-md);">
+          <img id="workflowImg" src="assets/img/workflow-1.jpg" onerror="this.onerror=null; this.src='assets/img/retail-store-hero.jpg';" alt="Sale Captured at POS" style="width: 100%; height: 260px; object-fit: cover; display: block; border-radius: 12px; transition: opacity 0.3s ease, transform 0.3s ease;">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    (function() {
+      var workflowData = [
+        {
+          title: "1. Sale Captured at POS",
+          desc: "When an item is scanned or sold through your POS system, StockFlow instantly registers the transaction data across all linked retail channels.",
+          badge: "Real-time Sale Event",
+          img: "assets/img/workflow-1.jpg",
+          fallbackImg: "assets/img/retail-store-hero.jpg"
+        },
+        {
+          title: "2. Inventory Instantly Updated",
+          desc: "Physical and digital stock quantities are automatically decremented, preventing accidental overselling in online or offline stores.",
+          badge: "Live Stock Decrement",
+          img: "assets/img/workflow-2.jpg",
+          fallbackImg: "assets/img/hero-bg.jpg"
+        },
+        {
+          title: "3. Stock Threshold Evaluated",
+          desc: "StockFlow compares the new balance against customized safety thresholds and minimum reorder rules per product SKU.",
+          badge: "Rule Evaluation",
+          img: "assets/img/workflow-3.jpg",
+          fallbackImg: "assets/img/integration-hub-diagram.jpg"
+        },
+        {
+          title: "4. Low-Stock Alert Triggered",
+          desc: "If inventory falls below the safety level, an instant alert is pushed to your manager dashboard and mobile notifications.",
+          badge: "Instant Alert Notification",
+          img: "assets/img/workflow-4.jpg",
+          fallbackImg: "assets/img/shipping-fulfillment-hub.jpg"
+        },
+        {
+          title: "5. Purchase Order Pre-Filled",
+          desc: "StockFlow automatically generates a draft Purchase Order with suggested supplier quantities, ready for one-click approval.",
+          badge: "Automated Draft PO",
+          img: "assets/img/workflow-5.jpg",
+          fallbackImg: "assets/img/hero-bg-2.jpg"
+        }
+      ];
+
+      window.switchWorkflowStep = function(stepIdx) {
+        var data = workflowData[stepIdx];
+        if (!data) return;
+
+        var buttons = document.querySelectorAll('.workflow-step-btn');
+        for (var i = 0; i < buttons.length; i++) {
+          if (i === stepIdx) {
+            buttons[i].classList.add('active');
+          } else {
+            buttons[i].classList.remove('active');
+          }
+        }
+
+        var titleEl = document.getElementById('workflowTitle');
+        var descEl = document.getElementById('workflowDesc');
+        var badgeEl = document.getElementById('workflowBadge');
+        var imgEl = document.getElementById('workflowImg');
+        var detailBox = document.querySelector('.workflow-detail-box');
+
+        if (titleEl) titleEl.innerText = data.title;
+        if (descEl) descEl.innerText = data.desc;
+        if (badgeEl) badgeEl.innerText = data.badge;
+
+        if (imgEl) {
+          imgEl.style.opacity = '0.4';
+          setTimeout(function() {
+            imgEl.src = data.img;
+            imgEl.onerror = function() {
+              this.onerror = null;
+              this.src = data.fallbackImg;
+            };
+            imgEl.alt = data.title;
+            imgEl.style.opacity = '1';
+          }, 100);
+        }
+
+        if (detailBox) {
+          detailBox.classList.remove('workflow-pulse');
+          void detailBox.offsetWidth;
+          detailBox.classList.add('workflow-pulse');
+        }
+      };
+    })();
+  </script>
+
+  <!-- ==========================================================================
+       SECTION 04 — MULTI-LOCATION INVENTORY
+       ========================================================================== -->
+  <section class="section" style="background: var(--bg-surface-elevated); border-block: 1px solid var(--border-color);">
+    <div class="container">
+      <div class="section-header text-center reveal">
+        <span class="eyebrow">MULTI-LOCATION NETWORK</span>
+        <h2 class="section-title">CONTROL STOCK ACROSS EVERY STORE & WAREHOUSE.</h2>
+        <p class="section-desc">Manage inventories across multiple storefronts and central storage facilities with clear location-level stock balance.</p>
+      </div>
+
+      <div class="network-grid">
+        <div class="location-card reveal delay-1">
+          <div style="font-size: 0.8125rem; font-weight: 700; color: var(--text-muted);">STORE A</div>
+          <h4 style="font-size: 1.125rem; margin-top: 4px;">Main Street Boutique</h4>
+          <div class="location-count" data-counter="142">142</div>
+          <span style="font-size: 0.8125rem; color: var(--text-secondary);">Available Units</span>
+        </div>
+
+        <div class="location-card reveal delay-2">
+          <div style="font-size: 0.8125rem; font-weight: 700; color: var(--text-muted);">STORE B</div>
+          <h4 style="font-size: 1.125rem; margin-top: 4px;">Downtown Branch</h4>
+          <div class="location-count" data-counter="86">86</div>
+          <span style="font-size: 0.8125rem; color: var(--text-secondary);">Available Units</span>
+        </div>
+
+        <div class="location-card reveal delay-3">
+          <div style="font-size: 0.8125rem; font-weight: 700; color: var(--text-muted);">STORE C</div>
+          <h4 style="font-size: 1.125rem; margin-top: 4px;">Westside Outlet</h4>
+          <div class="location-count" data-counter="54">54</div>
+          <span style="font-size: 0.8125rem; color: var(--text-secondary);">Available Units</span>
+        </div>
+
+        <div class="location-card central reveal delay-4">
+          <div style="font-size: 0.8125rem; font-weight: 700; color: var(--brand-teal);">CENTRAL HUB</div>
+          <h4 style="font-size: 1.125rem; margin-top: 4px;">Main Warehouse</h4>
+          <div class="location-count" data-counter="420">420</div>
+          <span style="font-size: 0.8125rem; color: var(--text-secondary);">Available Units</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SECTION 05 — REPORTING
+       ========================================================================== -->
+  <section class="section">
+    <div class="container reporting-grid">
+      <div class="reveal reveal-left">
+        <span class="eyebrow">RETAIL ANALYTICS</span>
+        <h2 class="section-title">SEE THE NUMBERS BEHIND YOUR STORE.</h2>
+        <p class="section-desc" style="margin-bottom: 24px;">
+          Make confident purchasing and stocking decisions. StockFlow aggregates inventory valuation, gross profit margins, product velocity, and reorder trends into easy-to-read financial reports.
+        </p>
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 24px;">
+          <div style="background: var(--bg-surface); padding: 16px; border-radius: 8px; border: 1px solid var(--border-color);">
+            <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">INVENTORY TURNOVER</div>
+            <div style="font-size: 1.5rem; font-weight: 800; color: var(--brand-teal);" data-counter="4.8" data-suffix="x / yr" data-decimals="1">4.8x / yr</div>
+          </div>
+          <div style="background: var(--bg-surface); padding: 16px; border-radius: 8px; border: 1px solid var(--border-color);">
+            <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">AVERAGE MARGIN</div>
+            <div style="font-size: 1.5rem; font-weight: 800; color: var(--brand-teal);" data-counter="58.4" data-suffix="%" data-decimals="1">58.4%</div>
+          </div>
+        </div>
+        <a href="pricing.html" class="btn btn-primary">EXPLORE ANALYTICS →</a>
+      </div>
+
+      <!-- Pure CSS Bar Chart Visualization -->
+      <div class="reveal reveal-right" style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow-md);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h4 style="font-size: 1rem;">Monthly Stock Movement & Sales</h4>
+          <span style="font-size: 0.75rem; color: var(--brand-teal); font-weight: 700; background: var(--teal-light); padding: 4px 10px; border-radius: 20px;">Live Analytics</span>
+        </div>
+
+        <div class="css-bar-chart active">
+          <div class="chart-bar-group" title="Mon: 450 units moved">
+            <div class="chart-bar-container">
+              <div class="chart-bar" style="height: 45%;"></div>
+            </div>
+            <span class="chart-bar-label">Mon</span>
+          </div>
+          <div class="chart-bar-group" title="Tue: 650 units moved">
+            <div class="chart-bar-container">
+              <div class="chart-bar" style="height: 65%;"></div>
+            </div>
+            <span class="chart-bar-label">Tue</span>
+          </div>
+          <div class="chart-bar-group" title="Wed: 550 units moved">
+            <div class="chart-bar-container">
+              <div class="chart-bar" style="height: 55%;"></div>
+            </div>
+            <span class="chart-bar-label">Wed</span>
+          </div>
+          <div class="chart-bar-group" title="Thu: 850 units moved">
+            <div class="chart-bar-container">
+              <div class="chart-bar" style="height: 85%;"></div>
+            </div>
+            <span class="chart-bar-label">Thu</span>
+          </div>
+          <div class="chart-bar-group" title="Fri: 950 units moved">
+            <div class="chart-bar-container">
+              <div class="chart-bar" style="height: 95%;"></div>
+            </div>
+            <span class="chart-bar-label">Fri</span>
+          </div>
+          <div class="chart-bar-group" title="Sat: 750 units moved">
+            <div class="chart-bar-container">
+              <div class="chart-bar" style="height: 75%;"></div>
+            </div>
+            <span class="chart-bar-label">Sat</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SECTION 05b — RETAIL STORE IMAGE SHOWCASE
+       ========================================================================== -->
+  <section class="section img-showcase-section" style="padding-top: var(--space-xl); padding-bottom: var(--space-2xl);">
+    <div class="container">
+      <div class="showcase-card-frame reveal reveal-scale">
+        <!-- Store Background Image with Hover Scale (Sharp & Vibrant) -->
+        <img
+          src="assets/img/retail-store-hero.jpg"
+          alt="A modern, well-organized retail boutique store — the type of business StockFlow is built for"
+          class="showcase-img"
+        >
+
+        <!-- Single Clean Gradient Vignette (No Blur Filter so Photo Stays 100% Crystal Clear) -->
+        <div style="
+          position: absolute; inset: 0; z-index: 1;
+          background: linear-gradient(
+            to bottom,
+            rgba(10,14,28,0.45) 0%,
+            transparent 30%,
+            rgba(10,14,28,0.50) 65%,
+            rgba(10,14,28,0.92) 100%
+          );
+          pointer-events: none;
+        "></div>
+
+        <!-- Floating Hotspot Pins over Store Features -->
+        <div class="store-hotspot-pin" style="top: 22%; left: 28%;">
+          <span class="pulse-dot" style="width: 8px; height: 8px; border-radius: 50%; background: #0EEDC8;"></span>
+          <span>Shelf Stock: 42 Units Syncing</span>
+        </div>
+
+        <div class="store-hotspot-pin" style="top: 34%; right: 24%;">
+          <span class="pulse-dot" style="width: 8px; height: 8px; border-radius: 50%; background: #0EEDC8;"></span>
+          <span>POS Checkout Active</span>
+        </div>
+
+        <!-- Top-left eyebrow label -->
+        <div class="reveal reveal-left" style="
+          position: absolute; top: 28px; left: 32px; z-index: 2;
+          background: rgba(14,237,200,0.18);
+          border: 1px solid rgba(14,237,200,0.45);
+          border-radius: 40px;
+          padding: 8px 20px;
+          font-size: 0.75rem;
+          font-weight: 800;
+          letter-spacing: 0.1em;
+          color: #0EEDC8;
+          font-family: var(--font-heading);
+          box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+        ">BUILT FOR REAL RETAIL</div>
+
+        <!-- Bottom Overlay Panel (Crisp & Readable) -->
+        <div class="reveal reveal-scale" style="
+          position: absolute;
+          bottom: 0; left: 0; right: 0; z-index: 2;
+          padding: 36px 40px 40px;
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-end;
+          flex-wrap: wrap;
+          gap: 24px;
+        ">
+          <div>
+            <h2 style="
+              font-family: var(--font-heading);
+              font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+              font-weight: 800;
+              color: #FFFFFF;
+              letter-spacing: -0.02em;
+              margin: 0 0 10px;
+              line-height: 1.15;
+              text-shadow: 0 2px 18px rgba(0,0,0,0.7);
+            ">EVERY SHELF. EVERY SALE.<br>EVERY STORE.</h2>
+            <p style="
+              color: rgba(255,255,255,0.88);
+              font-size: 1.0625rem;
+              max-width: 520px;
+              margin: 0 0 20px;
+              line-height: 1.55;
+              text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+            ">
+              StockFlow gives independent retailers the operational clarity of enterprise-grade tools — at a price that makes sense for your store.
+            </p>
+            <a href="features.html" class="btn btn-primary" style="padding: 12px 24px;">EXPLORE STORE WORKFLOW →</a>
+          </div>
+
+          <!-- Glassmorphic KPI Chips Grid -->
+          <div style="display: flex; gap: 14px; flex-wrap: wrap; align-items: center;">
+            <div class="showcase-kpi-chip" style="background: rgba(10, 14, 28, 0.72); border: 1px solid rgba(255, 255, 255, 0.25);">
+              <div style="font-size: 1.625rem; font-weight: 800; color: #0EEDC8; font-family: var(--font-heading);" data-counter="2400" data-suffix="+">2,400+</div>
+              <div style="font-size: 0.75rem; color: rgba(255,255,255,0.85); font-weight: 600; margin-top: 2px;">Active Retailers</div>
+            </div>
+            <div class="showcase-kpi-chip" style="background: rgba(10, 14, 28, 0.72); border: 1px solid rgba(255, 255, 255, 0.25);">
+              <div style="font-size: 1.625rem; font-weight: 800; color: #0EEDC8; font-family: var(--font-heading);" data-counter="12" data-suffix="M+">12M+</div>
+              <div style="font-size: 0.75rem; color: rgba(255,255,255,0.85); font-weight: 600; margin-top: 2px;">SKUs Tracked</div>
+            </div>
+            <div class="showcase-kpi-chip" style="background: rgba(10, 14, 28, 0.72); border: 1px solid rgba(255, 255, 255, 0.25);">
+              <div style="font-size: 1.625rem; font-weight: 800; color: #0EEDC8; font-family: var(--font-heading);" data-counter="99.9" data-suffix="%" data-decimals="1">99.9%</div>
+              <div style="font-size: 0.75rem; color: rgba(255,255,255,0.85); font-weight: 600; margin-top: 2px;">Uptime SLA</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SECTION 06 (NEW UNIQUE SECTION) — OMNICHANNEL LIVE SYNC SIMULATOR
+       ========================================================================== -->
+  <section class="section" style="background: var(--bg-surface-elevated); border-top: 1px solid var(--border-color); padding-block: var(--space-2xl);">
+    <div class="container">
+      <div class="section-header text-center reveal">
+        <span class="eyebrow" style="background: rgba(14,237,200,0.15); border: 1px solid rgba(14,237,200,0.3); color: #0EEDC8;">OMNICHANNEL SYNC ENGINE</span>
+        <h2 class="section-title">TEST LIVE MULTI-CHANNEL STOCK SYNC.</h2>
+        <p class="section-desc">Click the simulation actions below to test how real-time checkout sales update inventory and trigger automated purchase orders instantly.</p>
+      </div>
+
+      <div class="reveal reveal-scale" style="
+        max-width: 920px;
+        margin: 0 auto;
+        background: rgba(10, 16, 30, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: var(--radius-xl);
+        padding: 36px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.45);
+      ">
+        <!-- Interactive Action Bar -->
+        <div class="sim-action-btn-group">
+          <button id="simPosBtn" class="btn btn-primary sim-btn">
+            🛍️ Simulate In-Store POS Sale (-1 Unit)
+          </button>
+          <button id="simWebBtn" class="btn btn-navy-secondary sim-btn">
+            🌐 Simulate Web Checkout (-3 Units)
+          </button>
+          <button id="simResetBtn" class="btn btn-navy-secondary sim-btn">
+            🔄 Restock Item
+          </button>
+        </div>
+
+
+        <!-- Product & Live Status Card -->
+        <div style="
+          background: rgba(16, 24, 40, 0.85);
+          border: 1px solid rgba(255,255,255,0.12);
+          border-radius: var(--radius-lg);
+          padding: 24px;
+          margin-bottom: 24px;
+        ">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 20px;">
+            <div>
+              <span style="font-size: 0.75rem; color: #98A2B3; font-weight: 700;">TEST ITEM</span>
+              <h3 style="font-size: 1.25rem; color: #FFFFFF; margin-top: 2px;">Classic Oxford Cotton Shirt (SKU: OX-101)</h3>
+            </div>
+            <div>
+              <span id="simStatusBadge" style="
+                background: rgba(14,237,200,0.15);
+                border: 1px solid rgba(14,237,200,0.4);
+                color: #0EEDC8;
+                padding: 6px 16px;
+                border-radius: 20px;
+                font-size: 0.8125rem;
+                font-weight: 700;
+              ">🟢 Stock Level Optimal</span>
+            </div>
+          </div>
+
+          <!-- Progress Bar & Count -->
+          <div style="margin-bottom: 14px;">
+            <div style="display: flex; justify-content: space-between; font-size: 0.875rem; color: #FFFFFF; margin-bottom: 8px;">
+              <span>Available Shelf Qty: <strong id="simQtyText" style="color: #0EEDC8;">12 Units</strong></span>
+              <span style="color: #98A2B3;">Reorder Point: 5 Units</span>
+            </div>
+            <div style="background: rgba(255,255,255,0.1); height: 12px; border-radius: 6px; overflow: hidden;">
+              <div id="simProgressBar" style="
+                width: 80%;
+                height: 100%;
+                background: linear-gradient(90deg, #0EEDC8 0%, #25B5A5 100%);
+                border-radius: 6px;
+                transition: width 0.4s ease, background 0.4s ease;
+              "></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Activity Terminal Log -->
+        <div style="
+          background: #080C18;
+          border: 1px solid rgba(255,255,255,0.1);
+          border-radius: var(--radius-md);
+          padding: 16px;
+          font-family: monospace;
+          font-size: 0.8125rem;
+          color: #98A2B3;
+          max-height: 140px;
+          overflow-y: auto;
+        " id="simTerminalLog">
+          <div style="color: #0EEDC8;">[SYS] Omnichannel sync initialized. Ready for incoming sales events...</div>
+        </div>
+
+        <div class="btn-group" style="margin-top: 28px; justify-content: center;">
+          <a href="login.html" class="btn btn-primary">START FREE TRIAL TODAY →</a>
+          <a href="features.html" class="btn btn-navy-secondary" style="border-color: rgba(255,255,255,0.25);">EXPLORE ALL FEATURES →</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       FOOTER
+       ========================================================================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="brand-logo">
+            <div class="brand-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                <polyline points="9 22 9 12 15 12 15 22"/>
+              </svg>
+            </div>
+            <div class="brand-text">
+              <span class="brand-name">STOCKFLOW</span>
+              <span class="brand-desc">RETAIL INVENTORY OS</span>
+            </div>
+          </div>
+          <p>Practical, modern SaaS inventory management software designed for small and growing retailers.</p>
+          <div class="footer-social-links">
+            <a href="#" class="footer-social-icon" aria-label="X (formerly Twitter)" title="X (Twitter)">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+            <a href="#" class="footer-social-icon" aria-label="LinkedIn" title="LinkedIn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.25V10.9H6.46M7.86 6.74a1.62 1.62 0 1 0 0 3.24 1.62 1.62 0 0 0 0-3.24z"/></svg>
+            </a>
+            <a href="#" class="footer-social-icon" aria-label="Facebook" title="Facebook">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.99 3.66 9.12 8.44 9.88v-6.99H7.9v-2.89h2.54V9.8c0-2.51 1.49-3.89 3.78-3.89 1.09 0 2.23.19 2.23.19v2.47h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.45 2.89h-2.33v6.99C18.34 21.12 22 16.99 22 12z"/></svg>
+            </a>
+            <a href="#" class="footer-social-icon" aria-label="Instagram" title="Instagram">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </a>
+            <a href="#" class="footer-social-icon" aria-label="GitHub" title="GitHub">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">PRODUCT</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="home-2.html">Home 2</a></li>
+            <li><a href="features.html">Features</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">RESOURCES</h4>
+          <ul class="footer-links">
+            <li><a href="integrations.html">Integrations</a></li>
+            <li><a href="dashboard.html#help">Help & Support</a></li>
+            <li><a href="login.html">Retailer Portal</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">ACCOUNT</h4>
+          <ul class="footer-links">
+            <li><a href="login.html">Login</a></li>
+            <li><a href="pricing.html">Start Free</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">NEWSLETTER</h4>
+          <p style="font-size: 0.875rem; color: #98A2B3; margin-bottom: 12px;">GET PRACTICAL RETAIL INSIGHTS</p>
+          <form class="newsletter-form">
+            <input type="email" placeholder="Enter your email" class="newsletter-input" required>
+            <button type="submit" class="btn btn-primary" style="padding: 10px 16px;">SUBSCRIBE →</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>© 2026 StockFlow. All rights reserved. Retail Inventory Management OS.</div>
+        <div class="footer-bottom-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Accessibility</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const posBtn = document.getElementById('simPosBtn');
+      const webBtn = document.getElementById('simWebBtn');
+      const resetBtn = document.getElementById('simResetBtn');
+      const qtyText = document.getElementById('simQtyText');
+      const progressBar = document.getElementById('simProgressBar');
+      const statusBadge = document.getElementById('simStatusBadge');
+      const terminalLog = document.getElementById('simTerminalLog');
+
+      let currentQty = 12;
+      const maxQty = 15;
+      const reorderPoint = 5;
+
+      function logMessage(msg, color = '#98A2B3') {
+        if (!terminalLog) return;
+        const time = new Date().toLocaleTimeString();
+        const line = document.createElement('div');
+        line.style.color = color;
+        line.style.marginTop = '4px';
+        line.textContent = `[${time}] ${msg}`;
+        terminalLog.appendChild(line);
+        terminalLog.scrollTop = terminalLog.scrollHeight;
+      }
+
+      function updateSyncUI() {
+        if (!qtyText || !progressBar || !statusBadge) return;
+        qtyText.textContent = `${currentQty} Units`;
+        const pct = Math.max(0, Math.min(100, (currentQty / maxQty) * 100));
+        progressBar.style.width = `${pct}%`;
+
+        if (currentQty <= 2) {
+          progressBar.style.background = '#FF6B6B';
+          statusBadge.style.background = 'rgba(255,107,107,0.2)';
+          statusBadge.style.borderColor = 'rgba(255,107,107,0.5)';
+          statusBadge.style.color = '#FF6B6B';
+          statusBadge.textContent = '🔴 CRITICAL STOCK (PO Drafted #PO-9041)';
+        } else if (currentQty <= reorderPoint) {
+          progressBar.style.background = '#FFB020';
+          statusBadge.style.background = 'rgba(255,176,32,0.2)';
+          statusBadge.style.borderColor = 'rgba(255,176,32,0.5)';
+          statusBadge.style.color = '#FFB020';
+          statusBadge.textContent = '🟡 Low Stock Alert Triggered';
+        } else {
+          progressBar.style.background = 'linear-gradient(90deg, #0EEDC8 0%, #25B5A5 100%)';
+          statusBadge.style.background = 'rgba(14,237,200,0.15)';
+          statusBadge.style.borderColor = 'rgba(14,237,200,0.4)';
+          statusBadge.style.color = '#0EEDC8';
+          statusBadge.textContent = '🟢 Stock Level Optimal';
+        }
+      }
+
+      if (posBtn) {
+        posBtn.addEventListener('click', () => {
+          if (currentQty <= 0) {
+            logMessage('⚠️ Stockout! Cannot fulfill sale from shelf.', '#FF6B6B');
+            return;
+          }
+          currentQty -= 1;
+          logMessage(`POS Terminal #1 processed sale (-1). Remaining balance: ${currentQty} units.`, '#0EEDC8');
+          if (currentQty === reorderPoint) {
+            logMessage(`⚡ Stock fell to reorder point (${reorderPoint}). Auto reorder notification issued.`, '#FFB020');
+          } else if (currentQty <= 2) {
+            logMessage(`🚀 Purchase Order PO-9041 automatically generated and dispatched to supplier!`, '#FF6B6B');
+          }
+          updateSyncUI();
+        });
+      }
+
+      if (webBtn) {
+        webBtn.addEventListener('click', () => {
+          if (currentQty <= 0) {
+            logMessage('⚠️ Stockout! Web cart purchase failed.', '#FF6B6B');
+            return;
+          }
+          const deduct = Math.min(currentQty, 3);
+          currentQty -= deduct;
+          logMessage(`Shopify Store Order #10842 completed (-${deduct}). Remaining balance: ${currentQty} units.`, '#60A5FA');
+          if (currentQty <= 2) {
+            logMessage(`🚀 Purchase Order PO-9041 automatically generated and dispatched to supplier!`, '#FF6B6B');
+          }
+          updateSyncUI();
+        });
+      }
+
+      if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+          currentQty = 12;
+          logMessage('🔄 Supplier shipment received. Restocked to 12 units.', '#0EEDC8');
+          updateSyncUI();
+        });
+      }
+    });
+  </script>
+  <!-- BACK TO TOP BUTTON -->
+  <button class="back-to-top" id="backToTopBtn" aria-label="Back to top" title="Back to top">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  </button>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

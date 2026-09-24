@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us | StockFlow Retail Inventory OS</title>
+  <meta name="description" content="Get in touch with StockFlow retail specialists for product demos, onboarding questions, sales inquiries, or custom multi-store deployment.">
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+  <script>
+    (function() {
+      function safeGet(key, def) {
+        try { return localStorage.getItem(key) || def; } catch(e) { return def; }
+      }
+      function safeSet(key, val) {
+        try { localStorage.setItem(key, val); } catch(e) {}
+      }
+      window.applyTheme = function(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        safeSet('stockflow_theme', theme);
+        var btns = document.querySelectorAll('.js-theme-toggle');
+        for(var i=0; i<btns.length; i++) {
+          btns[i].innerHTML = theme === 'dark' ? '☀️' : '🌙';
+        }
+      };
+      window.toggleTheme = function() {
+        var curr = document.documentElement.getAttribute('data-theme') || 'light';
+        window.applyTheme(curr === 'dark' ? 'light' : 'dark');
+      };
+      window.applyRTL = function(dir) {
+        document.documentElement.setAttribute('dir', dir);
+        safeSet('stockflow_rtl', dir);
+        var btns = document.querySelectorAll('.js-rtl-toggle');
+        for(var i=0; i<btns.length; i++) {
+          btns[i].innerHTML = '⇄';
+        }
+      };
+      window.toggleRTL = function() {
+        var curr = document.documentElement.getAttribute('dir') || 'ltr';
+        window.applyRTL(curr === 'rtl' ? 'ltr' : 'rtl');
+      };
+      window.openMobileMenu = function() {
+        var mobileMenu = document.getElementById('mobileMenu');
+        if (mobileMenu) {
+          mobileMenu.classList.add('active');
+          document.body.style.overflow = 'hidden';
+        }
+      };
+      window.closeMobileMenu = function() {
+        var mobileMenu = document.getElementById('mobileMenu');
+        if (mobileMenu) {
+          mobileMenu.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      };
+      window.toggleMobileMenu = function() {
+        var mobileMenu = document.getElementById('mobileMenu');
+        if (mobileMenu) {
+          if (mobileMenu.classList.contains('active')) {
+            window.closeMobileMenu();
+          } else {
+            window.openMobileMenu();
+          }
+        }
+      };
+      var initTheme = safeGet('stockflow_theme', 'light');
+      var initRTL = safeGet('stockflow_rtl', 'ltr');
+      document.documentElement.setAttribute('data-theme', initTheme);
+      document.documentElement.setAttribute('dir', initRTL);
+    })();
+  </script>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo" id="navLogo">
+        <div class="brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">STOCKFLOW</span>
+          <span class="brand-desc">RETAIL INVENTORY OS</span>
+        </div>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="home-2.html" class="nav-link">Home 2</a></li>
+          <li><a href="about.html" class="nav-link">About</a></li>
+          <li><a href="features.html" class="nav-link">Features</a></li>
+          <li><a href="pricing.html" class="nav-link">Pricing</a></li>
+          <li><a href="integrations.html" class="nav-link">Integrations</a></li>
+          <li><a href="contact.html" class="nav-link active">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="control-btn js-theme-toggle" id="desktopThemeBtn" title="Toggle Theme" onclick="toggleTheme()">🌙</button>
+        <button class="control-btn js-rtl-toggle" id="desktopRTLBtn" title="Toggle RTL" onclick="toggleRTL()">⇄</button>
+        <a href="dashboard.html" class="control-btn" title="Dashboard" style="font-size:1.1rem;">📊</a>
+        <a href="login.html" class="btn btn-primary">Login →</a>
+      </div>
+
+      <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle Navigation" onclick="openMobileMenu()">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer -->
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-overlay" onclick="closeMobileMenu()"></div>
+    <div class="mobile-drawer">
+      <div>
+        <div class="mobile-drawer-header">
+          <div class="brand-logo">
+            <div class="brand-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                <polyline points="9 22 9 12 15 12 15 22"/>
+              </svg>
+            </div>
+            <div class="brand-text">
+              <span class="brand-name">STOCKFLOW</span>
+              <span class="brand-desc">RETAIL INVENTORY OS</span>
+            </div>
+          </div>
+          <button type="button" class="mobile-close-btn" id="closeMenuBtn" onclick="closeMobileMenu()">&times;</button>
+        </div>
+        <ul class="mobile-nav-links">
+          <li><a href="index.html" class="mobile-nav-link">Home</a></li>
+          <li><a href="home-2.html" class="mobile-nav-link">Home 2</a></li>
+          <li><a href="about.html" class="mobile-nav-link">About</a></li>
+          <li><a href="features.html" class="mobile-nav-link">Features</a></li>
+          <li><a href="pricing.html" class="mobile-nav-link">Pricing</a></li>
+          <li><a href="integrations.html" class="mobile-nav-link">Integrations</a></li>
+          <li><a href="contact.html" class="mobile-nav-link active">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="mobile-controls">
+          <div class="mobile-controls-row">
+            <button class="control-btn js-theme-toggle" style="flex:1;" title="Toggle Theme" onclick="toggleTheme()">🌙</button>
+            <button class="control-btn js-rtl-toggle" style="flex:1;" title="Toggle RTL" onclick="toggleRTL()">⇄</button>
+            <a href="dashboard.html" class="control-btn" style="flex:1; text-align:center; font-size:1.1rem;" title="Dashboard">📊</a>
+          </div>
+          <a href="login.html" class="btn btn-primary" style="width: 100%;">Login →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       SECTION 01 — COMPACT INNER HERO WITH BG IMAGE
+       ========================================================================== -->
+  <section class="section" style="
+    background-image: url('assets/img/hero-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    padding-block: 64px 48px;
+    overflow: hidden;
+  ">
+    <div style="
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        linear-gradient(105deg, rgba(10,14,28,0.92) 0%, rgba(10,14,28,0.75) 60%, rgba(10,14,28,0.45) 100%),
+        radial-gradient(ellipse 70% 90% at 75% 50%, rgba(25,181,165,0.15) 0%, transparent 70%);
+    "></div>
+
+    <div class="container text-center" style="position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; text-align: center;">
+      <span class="eyebrow" style="background: rgba(25,181,165,0.18); border: 1px solid rgba(25,181,165,0.35); color: #0EEDC8; margin-inline: auto;">TALK TO RETAIL SPECIALISTS</span>
+      <h1 class="section-title" style="color: #FFFFFF; font-size: clamp(2.25rem, 4vw, 3.25rem); max-width: 800px; margin-inline: auto; margin-block: 16px 20px; text-align: center;">
+        WE'RE HERE TO HELP YOUR STORE SUCCEED.
+      </h1>
+      <p class="section-desc" style="color: rgba(255,255,255,0.80); max-width: 640px; margin-inline: auto; text-align: center;">
+        Have questions about onboarding, POS integrations, or multi-location stock migration? Drop us a message below.
+      </p>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SECTION 02 — CONTACT FORM & INFO SPLIT
+       ========================================================================== -->
+  <section class="section" style="background: var(--bg-surface-elevated); border-block: 1px solid var(--border-color);">
+    <div class="container">
+      <div class="split-grid" style="align-items: start;">
+        <!-- Contact Form Card -->
+        <div class="contact-form-card reveal reveal-left">
+          <h3>Send Us a Message</h3>
+          
+          <form id="contactForm" onsubmit="event.preventDefault(); alert('Thank you! A StockFlow retail specialist will reach out within 2 business hours.'); this.reset();">
+            <div class="contact-form-row">
+              <div class="form-group">
+                <label class="form-label">Your Name</label>
+                <input type="text" required placeholder="Jordan Miller" class="form-input">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Store Email</label>
+                <input type="email" required placeholder="jordan@boutique.com" class="form-input">
+              </div>
+            </div>
+
+            <div class="contact-form-row">
+              <div class="form-group">
+                <label class="form-label">Store Name</label>
+                <input type="text" required placeholder="Main St Apparel" class="form-input">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Number of Locations</label>
+                <select class="form-input">
+                  <option>1 Storefront</option>
+                  <option>2 - 5 Locations</option>
+                  <option>6 - 15 Locations</option>
+                  <option>15+ Warehouse Hubs</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group full-width">
+              <label class="form-label">How can we help?</label>
+              <textarea rows="4" required placeholder="Tell us about your current inventory setup or integration requirements..." class="form-input"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary submit-btn">SEND MESSAGE →</button>
+          </form>
+        </div>
+
+
+        <!-- Contact Direct Info -->
+        <div class="contact-info-list reveal reveal-right">
+          <div class="contact-info-card">
+            <div style="font-size: 0.75rem; font-weight: 800; color: var(--brand-teal); margin-bottom: 6px; text-transform: uppercase;">HEADQUARTERS</div>
+            <h4 style="font-size: 1.125rem; margin-bottom: 6px;">Global Support Hub</h4>
+            <p style="font-size: 0.9375rem; color: var(--text-secondary); line-height: 1.5;">
+              100 Retail Plaza, Suite 400<br>San Francisco, CA 94105
+            </p>
+          </div>
+
+          <div class="contact-info-card">
+            <div style="font-size: 0.75rem; font-weight: 800; color: var(--brand-teal); margin-bottom: 6px; text-transform: uppercase;">CONTACT EMAILS</div>
+            <h4 style="font-size: 1.125rem; margin-bottom: 6px;">Direct Channels</h4>
+            <p style="font-size: 0.9375rem; color: var(--text-secondary); line-height: 1.6;">
+              <strong>Sales:</strong> sales@stockflow-app.com<br>
+              <strong>Support:</strong> support@stockflow-app.com<br>
+              <strong>Partnerships:</strong> partners@stockflow-app.com
+            </p>
+          </div>
+
+          <div class="contact-info-card">
+            <div style="font-size: 0.75rem; font-weight: 800; color: var(--brand-teal); margin-bottom: 6px; text-transform: uppercase;">AVAILABILITY</div>
+            <h4 style="font-size: 1.125rem; margin-bottom: 6px;">Support Hours</h4>
+            <p style="font-size: 0.9375rem; color: var(--text-secondary); line-height: 1.5;">
+              Monday – Friday: 24/5 Live Chat & Email<br>
+              Weekend Emergency Onboarding: Available for Priority Plans
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SECTION 03 — GOOGLE MAP & GLOBAL OFFICE LOCATIONS
+       ========================================================================== -->
+  <section class="section" style="background: var(--bg-main); padding-block: 80px; border-top: 1px solid var(--border-color);">
+    <div class="container">
+      
+      <!-- Section Header -->
+      <div class="section-header text-center" style="margin-bottom: 40px;">
+        <span class="eyebrow" style="background: var(--teal-light); color: var(--brand-teal); margin-inline: auto;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          GLOBAL OFFICE LOCATIONS
+        </span>
+        <h2 class="section-title" style="font-size: clamp(2rem, 3.5vw, 2.75rem); margin-block: 14px 18px;">
+          Visit StockFlow Headquarters & Regional Hubs
+        </h2>
+        <p class="section-desc" style="max-width: 640px; margin-inline: auto;">
+          Select an office location below to explore directions, direct phone lines, and visiting hours.
+        </p>
+      </div>
+
+      <!-- Office Location Selector Buttons -->
+      <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 32px;">
+        <button class="map-location-btn active" data-location="sf">
+          <span style="font-size:1.1rem;">🇺🇸</span> San Francisco HQ
+        </button>
+        <button class="map-location-btn" data-location="ny">
+          <span style="font-size:1.1rem;">🗽</span> New York Regional Hub
+        </button>
+        <button class="map-location-btn" data-location="london">
+          <span style="font-size:1.1rem;">🇬🇧</span> London European Hub
+        </button>
+      </div>
+
+      <!-- Map Container Frame -->
+      <div class="map-wrapper reveal">
+        <iframe
+          id="googleMapFrame"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.835434509374!2d-122.40139882357672!3d37.79155987198275!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8085806305a415a7%3A0xa59f714757c9172!2sMarket%20St%2C%20San%20Francisco%2C%20CA!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus"
+          width="100%"
+          height="480"
+          style="border:0;"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="StockFlow Office Location Map"
+        ></iframe>
+
+        <!-- Glassmorphic Info Card Overlay -->
+        <div class="map-info-card" id="mapInfoCard">
+          <div style="font-size: 0.75rem; color: #0EEDC8; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 6px;">
+            HEADQUARTERS
+          </div>
+          <h3 id="mapLocationTitle" style="font-size: 1.25rem; font-weight: 800; color: #FFF; margin-bottom: 8px;">
+            San Francisco Technology Hub
+          </h3>
+          <p id="mapLocationAddress" style="font-size: 0.875rem; color: #98A2B3; line-height: 1.5; margin-bottom: 14px;">
+            100 Retail Plaza, Suite 400<br>San Francisco, CA 94105, United States
+          </p>
+          <div style="display: flex; flex-direction: column; gap: 6px; font-size: 0.8125rem; color: rgba(255,255,255,0.85); margin-bottom: 16px;">
+            <div>📞 <strong style="color:#FFF;">Phone:</strong> <span id="mapLocationPhone">+1 (800) 555-STOCK</span></div>
+            <div>🕒 <strong style="color:#FFF;">Hours:</strong> <span id="mapLocationHours">Mon - Fri: 8:00 AM - 6:00 PM PST</span></div>
+          </div>
+          <a id="mapDirLink" href="https://maps.google.com/?q=Market+St,+San+Francisco,+CA" target="_blank" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 10px; font-size: 0.8125rem;">
+            GET DIRECTIONS →
+          </a>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="brand-logo">
+            <div class="brand-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                <polyline points="9 22 9 12 15 12 15 22"/>
+              </svg>
+            </div>
+            <div class="brand-text">
+              <span class="brand-name">STOCKFLOW</span>
+              <span class="brand-desc">RETAIL INVENTORY OS</span>
+            </div>
+          </div>
+          <p>Practical, modern SaaS inventory management software designed for small and growing retailers.</p>
+          <div class="footer-social-links">
+            <a href="#" class="footer-social-icon" aria-label="X (formerly Twitter)" title="X (Twitter)">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+            <a href="#" class="footer-social-icon" aria-label="LinkedIn" title="LinkedIn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.25V10.9H6.46M7.86 6.74a1.62 1.62 0 1 0 0 3.24 1.62 1.62 0 0 0 0-3.24z"/></svg>
+            </a>
+            <a href="#" class="footer-social-icon" aria-label="Facebook" title="Facebook">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.99 3.66 9.12 8.44 9.88v-6.99H7.9v-2.89h2.54V9.8c0-2.51 1.49-3.89 3.78-3.89 1.09 0 2.23.19 2.23.19v2.47h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.45 2.89h-2.33v6.99C18.34 21.12 22 16.99 22 12z"/></svg>
+            </a>
+            <a href="#" class="footer-social-icon" aria-label="Instagram" title="Instagram">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </a>
+            <a href="#" class="footer-social-icon" aria-label="GitHub" title="GitHub">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">PRODUCT</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="home-2.html">Home 2</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="features.html">Features</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">RESOURCES</h4>
+          <ul class="footer-links">
+            <li><a href="integrations.html">Integrations</a></li>
+            <li><a href="dashboard.html#help">Help & Support</a></li>
+            <li><a href="login.html">Retailer Portal</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">ACCOUNT</h4>
+          <ul class="footer-links">
+            <li><a href="login.html">Login</a></li>
+            <li><a href="pricing.html">Start Free</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">NEWSLETTER</h4>
+          <form class="newsletter-form">
+            <input type="email" placeholder="Enter your email" class="newsletter-input" required>
+            <button type="submit" class="btn btn-primary" style="padding: 10px 16px;">SUBSCRIBE →</button>
+          </form>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div>© 2026 StockFlow. All rights reserved. Retail Inventory OS.</div>
+        <div class="footer-bottom-links">
+          <a href="#">Privacy</a><a href="#">Terms</a><a href="#">Accessibility</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- BACK TO TOP BUTTON -->
+  <button class="back-to-top" id="backToTopBtn" aria-label="Back to top" title="Back to top">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  </button>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
