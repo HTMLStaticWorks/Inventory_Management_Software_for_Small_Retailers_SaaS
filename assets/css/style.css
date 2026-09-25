@@ -128,6 +128,61 @@ html, body {
   border-bottom-color: #1E293B !important;
 }
 
+/* ==========================================================================
+   LIGHT THEME — ABOUT MILESTONES SECTION CONTRAST FIX
+   Overrides inline dark-only styles on .about-timeline-btn (inactive state)
+   and the #aboutMilestoneBox showcase panel.
+   ========================================================================== */
+
+/* Inactive milestone year buttons — light theme readable */
+[data-theme="light"] .about-timeline-btn {
+  background: var(--bg-surface) !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+[data-theme="light"] .about-timeline-btn:hover {
+  background: var(--teal-light) !important;
+  border-color: var(--brand-teal) !important;
+  color: var(--brand-teal) !important;
+}
+
+/* Active milestone button — keep teal style (same for both themes) */
+[data-theme="light"] .about-timeline-btn.active {
+  background: rgba(14, 237, 200, 0.12) !important;
+  border: 1px solid #0EEDC8 !important;
+  color: #00A589 !important;
+}
+
+/* Milestone showcase box — replace near-black bg with proper light surface */
+[data-theme="light"] #aboutMilestoneBox {
+  background: var(--bg-surface) !important;
+  border: 1px solid var(--border-color) !important;
+  box-shadow: 0 8px 32px rgba(10, 15, 26, 0.08) !important;
+}
+
+/* Text inside showcase box — fix hardcoded white/muted colors */
+[data-theme="light"] #aboutMilestoneBox h3,
+[data-theme="light"] #mTitle {
+  color: var(--text-primary) !important;
+}
+
+[data-theme="light"] #aboutMilestoneBox p,
+[data-theme="light"] #mDesc {
+  color: var(--text-secondary) !important;
+}
+
+[data-theme="light"] #aboutMilestoneBox #mStats {
+  background: var(--bg-surface-elevated) !important;
+  border-color: var(--border-color) !important;
+}
+
+[data-theme="light"] #mStats div > div:last-child {
+  color: var(--text-secondary) !important;
+}
+
+
+
 /* --- COMPREHENSIVE RTL LAYOUT SUPPORT --- */
 [dir="rtl"] {
   direction: rtl !important;
@@ -909,6 +964,24 @@ img, svg {
   50% { transform: translateY(-8px); }
 }
 
+/* --- FIX: Floating badge overflows hero bg at 360px mobile --- */
+@media (max-width: 480px) {
+  .hero-mockup-wrapper {
+    padding-bottom: 0 !important;
+  }
+  .mockup-floating-badge {
+    position: relative !important;
+    bottom: auto !important;
+    inset-inline-start: auto !important;
+    left: auto !important;
+    right: auto !important;
+    margin-top: 12px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    animation: none !important;
+  }
+}
+
 /* --- HOME SECTION 02: PROBLEM & SOLUTION --- */
 .split-grid {
   display: grid;
@@ -1407,6 +1480,85 @@ img, svg {
 }
 
 /* ==========================================================================
+   PRODUCT JOURNEY — MOBILE 360px FIX (home-2.html Section 03)
+   ========================================================================== */
+@media (max-width: 480px) {
+
+  /* Switch from horizontal flex row → vertical single column */
+  .journey-timeline {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    gap: 0 !important;
+    margin-top: 28px !important;
+  }
+
+  /* Hide the broken horizontal connector line */
+  .journey-connector {
+    display: none !important;
+  }
+
+  /* Each step: horizontal card layout (icon left, text right) */
+  .journey-step {
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 16px !important;
+    text-align: left !important;
+    padding: 14px 16px !important;
+    background: var(--bg-surface) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: var(--radius-md) !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    position: relative !important;
+    z-index: 2 !important;
+    margin-bottom: 0 !important;
+  }
+
+  /* Vertical connector line between steps via border-left on a pseudo wrapper */
+  .journey-step:not(:last-child)::after {
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: -20px;
+    left: 38px;
+    width: 2px;
+    height: 20px;
+    background: var(--brand-teal);
+    opacity: 0.45;
+    z-index: 1;
+  }
+
+  /* Add vertical gap between steps to accommodate connector */
+  .journey-step:not(:last-child) {
+    margin-bottom: 20px !important;
+  }
+
+  /* Slightly smaller icon box on 360 */
+  .journey-icon-box {
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    font-size: 1.125rem !important;
+    flex-shrink: 0 !important;
+    border-radius: var(--radius-sm) !important;
+  }
+
+  /* Step text block */
+  .journey-step strong {
+    font-size: 0.875rem !important;
+    display: block !important;
+    line-height: 1.3 !important;
+  }
+
+  .journey-step span {
+    font-size: 0.75rem !important;
+    display: block !important;
+    margin-top: 2px !important;
+  }
+}
+
+/* ==========================================================================
    FEATURES, PRICING, INTEGRATIONS & LOGIN PAGES
    ========================================================================== */
 
@@ -1776,14 +1928,25 @@ img, svg {
   margin-block: 16px 8px;
 }
 
+.pricing-card > .btn {
+  margin-top: auto;
+}
+
+.pricing-features-list,
 .pricing-feature-list {
   list-style: none;
+  padding: 0;
+  margin: 0;
   display: flex;
   flex-direction: column;
   gap: 14px;
-  margin-block: 28px;
+  margin-block: 24px;
+  flex-grow: 1;
+  text-align: start;
 }
 
+.pricing-features-list li,
+.pricing-feature-list li,
 .pricing-feature-item {
   display: flex;
   align-items: center;
@@ -2086,6 +2249,29 @@ img, svg {
 }
 
 /* FAQ Accordion Section */
+.contact-social-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: var(--shadow-sm);
+  text-decoration: none;
+}
+
+.contact-social-btn:hover {
+  background: var(--brand-teal);
+  color: #FFFFFF;
+  border-color: var(--brand-teal);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px var(--teal-glow);
+}
+
 .faq-container {
   max-width: 860px;
   margin-inline: auto;
@@ -2197,8 +2383,12 @@ img, svg {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
-  margin-bottom: 14px;
-  width: 100%;
+  position: absolute;
+  top: 24px;
+  inset-inline-end: 24px;
+  z-index: 10;
+  width: auto;
+  margin-bottom: 0;
 }
 
 .login-card {
@@ -2223,6 +2413,8 @@ img, svg {
   }
 
   .login-top-controls {
+    position: static;
+    width: 100%;
     margin-bottom: 12px;
   }
 

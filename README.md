@@ -1,1 +1,0 @@
-# Inventory_Management_Software_for_Small_Retailers_SaaS

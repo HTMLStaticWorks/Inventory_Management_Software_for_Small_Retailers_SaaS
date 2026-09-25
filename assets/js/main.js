@@ -84,11 +84,11 @@ window.toggleMobileMenu = function() {
 document.addEventListener('DOMContentLoaded', () => {
   document.body.addEventListener('click', (e) => {
     const toggleThemeBtn = e.target.closest('.js-theme-toggle');
-    if (toggleThemeBtn) {
+    if (toggleThemeBtn && !toggleThemeBtn.hasAttribute('onclick')) {
       window.toggleTheme();
     }
     const toggleRTLBtn = e.target.closest('.js-rtl-toggle');
-    if (toggleRTLBtn) {
+    if (toggleRTLBtn && !toggleRTLBtn.hasAttribute('onclick')) {
       window.toggleRTL();
     }
   });
